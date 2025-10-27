@@ -1,75 +1,104 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { ArrowDown } from 'lucide-react';
-import ParticlesCanvas from './ParticlesCanvas'; // ⬅️ 引入你剛剛寫好的組件
+// src/App.jsx (✨全新改版：React Router + 多頁式架構)
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
-const PEN_NAME = '斑泥漫步';
+// 📦 各個頁面元件
+import HomePage from './pages/HomePage';
+import LiterarySalonPage from './pages/LiterarySalonPage';
+import TravelPhotographyPage from './pages/TravelPhotographyPage';
+import EconomicDiscussionPage from './pages/EconomicDiscussionPage';
+import AboutPage from './pages/AboutPage';
+import BlogIndex from './pages/BlogIndex';
+import PostDetailPage from './pages/PostDetailPage';
 
-const HomePage = React.memo(({ canvasRef, scrollY }) => {
-  const canvasParallaxStyle = useMemo(() => ({
-    transform: `translateY(${scrollY * 0.4}px)`,
-    opacity: 1 - scrollY / 500,
-  }), [scrollY]);
+import { BookOpen, Camera, Lamp, Home } from 'lucide-react';
 
-  const infoParallaxStyle = useMemo(() => ({
-    transform: `translateY(${scrollY * 0.2}px)`,
-  }), [scrollY]);
+const PEN_NAME = '斑泥走走';
+const BG_COLOR = 'bg-gray-50';
 
-  const lightEffectStyle = {
-    background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.7) 50%, rgba(250, 250, 250, 0.0) 100%)',
-  };
+const AppLayout = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPath = location.pathname;
+
+  const navItems = [
+    { name: '主頁', path: '/', icon: Home },
+    { name: '文學沙龍', path: '/salon', icon: BookOpen },
+    { name: '旅遊攝影', path: '/photography', icon: Camera },
+    { name: '經濟討論', path: '/economic', icon: Lamp },
+  ];
 
   return (
-    <>
-      <div className="relative w-full h-[100vh] flex items-center justify-center text-center overflow-hidden bg-off-white">
-        {/* Canvas 粒子背景 */}
-        <div
-          className="absolute inset-0 w-full h-full z-0 transition-transform duration-100 ease-out"
-          style={{ ...lightEffectStyle, ...canvasParallaxStyle }}
-        >
-          <ParticlesCanvas canvasRef={canvasRef} />
-        </div>
+    <div className={`min-h-screen text-[#333333] font-sans antialiased ${BG_COLOR}`}>
+      {/* 導覽列 */}
 
-        {/* 中間文字資訊區塊 */}
-        <div
-          className="relative z-10 p-8 md:p-12 max-w-4xl text-[#333333] transition-transform duration-100 ease-out"
-          style={infoParallaxStyle}
-        >
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-serif font-extrabold mb-6 tracking-widest leading-tight pointer-events-none select-none h-[150px] md:h-[200px] text-[#333333] opacity-0">
-            {PEN_NAME}
-          </h1>
-
-          <p className="text-xl md:text-2xl text-gray-600 tracking-wider leading-relaxed border-t border-b border-gray-300 py-4 inline-block mt-4">
-            觀 | 文學與光影
-          </p>
-          <p className="mt-8 text-lg text-gray-500">
-            —— 點擊或向下捲動探索我的世界 ——
-          </p>
-          <div className="mt-12">
-            <ArrowDown className="w-8 h-8 mx-auto text-gray-500 animate-bounce" />
+      <header className="sticky top-0 z-50 transition-all duration-300 bg-white shadow-md text-[#333333]">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center">
+          <div
+            className="flex items-center space-x-3 cursor-pointer mb-2 sm:mb-0"
+            onClick={() => navigate('/')}
+          >
+            <img
+              src="/site_logo.svg"
+              alt="Logo"
+              className="w-10 h-10 object-contain"
+            />
+            <span className="text-2xl sm:text-3xl font-serif font-bold tracking-widest text-amber-700">
+              {PEN_NAME}
+            </span>
           </div>
-        </div>
-      </div>
-
-      {/* 第二區塊：內文展示 */}
-      <div className="w-full bg-off-white min-h-[100vh]">
-        <div className="pt-24 pb-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-serif text-[#333333] mb-8 pb-3 text-center">
-            最新消息 📜
-          </h2>
-          <div className="text-center text-gray-600">
-            <p>這是一個向下捲動的內容區塊，展示了主視覺與內容區塊的懸浮效果。</p>
-            <p className='mt-4'>您可以繼續新增關於「最新文章」與「自我介紹」的內容。</p>
+          <div className="flex space-x-1 sm:space-x-4">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentPath === item.path;
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`flex items-center text-sm md:text-base font-medium px-3 py-1 rounded-full transition-colors duration-300 ${
+                    isActive
+                      ? 'bg-amber-600 text-white shadow-md'
+                      : 'text-gray-600 hover:text-amber-600 hover:bg-amber-50'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 mr-1 hidden sm:inline-block" />
+                  {item.name}
+                </button>
+              );
+            })}
           </div>
+        </nav>
+      </header>
+
+      {/* 📦 主頁內容區域 */}
+      <main className="min-h-[100vh]">
+        {children}
+        {/* 🔁 回首頁按鈕 */}
+        <button
+          onClick={() => navigate('/')}
+          className="fixed bottom-6 right-6 bg-amber-500 text-white px-4 py-2 z-20 rounded-full shadow-lg hover:bg-amber-600 transition flex items-center"
+        >
+          回主頁
+        </button>
+      </main>
+
+      {/* 頁尾 */}
+      <footer className="w-full py-8 border-t border-gray-200 mt-auto bg-white">
+        <div className="max-w-7xl mx-auto text-center text-sm text-gray-500 px-4">
+          <p>
+            © {new Date().getFullYear()} {PEN_NAME} | 個人創作 | 版權所有
+          </p>
+          <p className="mt-2">“你若愛上世界的美，那美就是神的呼喚 - Thomas Merton”</p>
         </div>
-        <div className="h-[50vh]"></div> {/* 增加捲動空間 */}
-      </div>
-    </>
+      </footer>
+    </div>
   );
-});
+};
 
+// App 元件
 const App = () => {
-  const [scrollY, setScrollY] = useState(0);
   const canvasRef = useRef(null);
+  const [scrollY, setScrollY] = useState(0);
 
   const handleScroll = useCallback(() => {
     setScrollY(window.scrollY);
@@ -81,34 +110,17 @@ const App = () => {
   }, [handleScroll]);
 
   return (
-    <div className="min-h-screen bg-off-white text-[#333333] font-sans antialiased">
-      {/* 導覽列 */}
-      <header className="sticky top-0 z-50 transition-all duration-300 bg-white shadow-md text-[#333333]">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="text-2xl font-serif font-bold tracking-widest cursor-pointer">
-            {PEN_NAME}
-          </div>
-          <button className="flex items-center border border-current px-3 py-1 text-sm rounded-full hover:bg-current hover:text-white transition-colors duration-300 border-[#333333] text-[#333333]">
-            聯繫我
-          </button>
-        </nav>
-      </header>
-
-      {/* 主要內容 */}
-      <main className="min-h-[200vh]">
-        <HomePage canvasRef={canvasRef} scrollY={scrollY} />
-      </main>
-
-      {/* 頁尾 */}
-      <footer className="w-full py-8 border-t border-gray-200 mt-auto bg-white">
-        <div className="max-w-7xl mx-auto text-center text-sm text-gray-500">
-          <p>
-            © {new Date().getFullYear()} {PEN_NAME} | 個人作品集與文學雜誌 | 設計靈感源自中國簡約風
-          </p>
-          <p className="mt-2">“吾心安處，便是吾鄉。”</p>
-        </div>
-      </footer>
-    </div>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<HomePage canvasRef={canvasRef} scrollY={scrollY} />} />
+          <Route path="/salon" element={<LiterarySalonPage />} />
+          <Route path="/photography" element={<TravelPhotographyPage />} />
+          <Route path="/economic" element={<EconomicDiscussionPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/blog" element={<BlogIndex />} />
+          <Route path="/posts/:slug" element={<PostDetailPage />} />
+        </Routes>
+      </AppLayout>
   );
 };
 

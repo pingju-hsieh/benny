@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const PEN_NAME = "斑泥漫步";
+const PEN_NAME = "斑泥走走";
 
 const ParticlesCanvas = ({ canvasRef }) => {
   useEffect(() => {
