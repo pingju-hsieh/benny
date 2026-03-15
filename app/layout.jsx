@@ -7,7 +7,7 @@ const SITE_NAME = '斑泥走走';
 const SITE_DESC = '文學、旅行攝影與經濟思辨的個人創作網站。';
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://banni-walks.com'),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
@@ -40,19 +40,36 @@ const serif = Noto_Serif_TC({
 });
 
 export default function RootLayout({ children }) {
+  // GA4 ID 建議還是保留環境變數，若要寫死也可以直接替換引號內的字串
   const gaId = process.env.NEXT_PUBLIC_GA4_ID;
-  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 
   return (
     <html lang="zh-Hant" className={serif.variable}>
+      <head>
+        {/* 1. Netlify Identity - 確保 /admin 後台登入與密碼設定功能正常 */}
+        <Script 
+          src="https://identity.netlify.com/v1/netlify-identity-widget.js" 
+          strategy="beforeInteractive" 
+        />
+
+        {/* 2. Google AdSense - 直接寫入你的 ID */}
+        <Script
+          id="adsense-init"
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6527096544264566"
+          crossOrigin="anonymous"
+        />
+      </head>
+      
       <body className="min-h-screen text-[#333333] font-sans antialiased bg-gray-50">
+        {/* 3. Google Analytics 4 */}
         {gaId && (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
               strategy="afterInteractive"
             />
-            <Script id="ga4" strategy="afterInteractive">
+            <Script id="ga-init" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
@@ -63,18 +80,8 @@ export default function RootLayout({ children }) {
           </>
         )}
 
-        {adsenseClient && (
-          <Script
-            async
-            strategy="afterInteractive"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-            crossOrigin="anonymous"
-          />
-        )}
-
         <SiteLayout>{children}</SiteLayout>
       </body>
     </html>
   );
 }
-
