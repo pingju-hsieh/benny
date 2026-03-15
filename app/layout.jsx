@@ -40,19 +40,16 @@ const serif = Noto_Serif_TC({
 });
 
 export default function RootLayout({ children }) {
-  // GA4 ID 建議還是保留環境變數，若要寫死也可以直接替換引號內的字串
-  const gaId = process.env.NEXT_PUBLIC_GA4_ID;
-
   return (
     <html lang="zh-Hant" className={serif.variable}>
       <head>
-        {/* 1. Netlify Identity - 確保 /admin 後台登入與密碼設定功能正常 */}
+        {/* 1. Netlify Identity */}
         <Script 
           src="https://identity.netlify.com/v1/netlify-identity-widget.js" 
           strategy="beforeInteractive" 
         />
 
-        {/* 2. Google AdSense - 直接寫入你的 ID */}
+        {/* 2. Google AdSense */}
         <Script
           id="adsense-init"
           strategy="afterInteractive"
@@ -62,23 +59,19 @@ export default function RootLayout({ children }) {
       </head>
       
       <body className="min-h-screen text-[#333333] font-sans antialiased bg-gray-50">
-        {/* 3. Google Analytics 4 */}
-        {gaId && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}', { anonymize_ip: true });
-              `}
-            </Script>
-          </>
-        )}
+        {/* 3. Google Analytics 4 (GA4) - 直接寫入 ID 版本 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-FTSYMFWHVC"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-FTSYMFWHVC', { anonymize_ip: true });
+          `}
+        </Script>
 
         <SiteLayout>{children}</SiteLayout>
       </body>
