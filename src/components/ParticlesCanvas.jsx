@@ -6,38 +6,47 @@ const ParticlesCanvas = ({ canvasRef }) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
 
     const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     window.addEventListener("resize", resize);
     resize();
 
-    const density = 4;
-    const radius = 1.2;
+    const cssWidth = canvas.getBoundingClientRect().width;
+    const isMobile = cssWidth < 768;
+    // 手機：點稍微密一點；桌機：點更疏一些
+    const density = isMobile ? 3 : 4; // 數字越大取樣越疏
+    const radius = isMobile ? 1.0 : 1.6;
     const particles = [];
-    const mouse = { x: null, y: null };
 
     let startTime = performance.now();
     let revealProgress = 0; // 從 0 慢慢到 1：聚合進度
 
     const drawTextMask = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const fontSize = Math.min(canvas.width / (PEN_NAME.length * 1.8), 200);
+      const base = isMobile ? 0.85 : 1.2;
+      const textLogicalWidth = canvas.width / dpr;
+      const fontSize = Math.min(textLogicalWidth / (PEN_NAME.length * base), isMobile ? 110 : 220);
       ctx.font = `800 ${fontSize}px 'Noto Serif TC', serif`;
       ctx.fillStyle = "#000";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(PEN_NAME, canvas.width / 2, canvas.height / 3);
+      ctx.fillText(PEN_NAME, (canvas.width / dpr) / 2, (canvas.height / dpr) / 3);
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
       const points = [];
 
-      for (let y = 0; y < canvas.height; y += density) {
-        for (let x = 0; x < canvas.width; x += density) {
-          const index = (y * canvas.width + x) * 4 + 3;
+      const logicalWidth = canvas.width / dpr;
+      const logicalHeight = canvas.height / dpr;
+      for (let y = 0; y < logicalHeight; y += density) {
+        for (let x = 0; x < logicalWidth; x += density) {
+          const index = ((y * dpr) * canvas.width + (x * dpr)) * 4 + 3;
           if (imageData[index] > 100) {
             points.push({ x, y });
           }
@@ -62,8 +71,8 @@ const ParticlesCanvas = ({ canvasRef }) => {
     };
 
     const applyImpulse = (mx, my, isClick = false) => {
-      const range = isClick ? 200 : 80;
-      const impulseStrength = isClick ? 6 : 3;
+      const range = isClick ? (isMobile ? 140 : 200) : (isMobile ? 60 : 80);
+      const impulseStrength = isClick ? (isMobile ? 4.5 : 6) : (isMobile ? 2.5 : 3);
 
       for (let p of particles) {
         const dx = p.x - mx;
@@ -92,15 +101,18 @@ const ParticlesCanvas = ({ canvasRef }) => {
       }
 
       for (let p of particles) {
-        // 抖動
-        p.vx += (Math.random() - 0.5) * 0.1;
-        p.vy += (Math.random() - 0.5) * 0.1;
+        // 抖動（提升飄逸感，但控制在柔和範圍）
+        const jitter = isMobile ? 0.1 : 0.2;
+        p.vx += (Math.random() - 0.5) * jitter;
+        p.vy += (Math.random() - 0.5) * jitter;
 
         // 聚合力隨時間變強
         const dx = p.ox - p.x;
         const dy = p.oy - p.y;
-        p.vx += dx * 0.01 * revealProgress;
-        p.vy += dy * 0.01 * revealProgress;
+        // 聚合力略微放大，讓漂浮後能更有節奏地回到字型
+        const attract = isMobile ? 0.012 : 0.014;
+        p.vx += dx * attract * revealProgress;
+        p.vy += dy * attract * revealProgress;
 
         // 阻尼
         p.vx *= 0.9;

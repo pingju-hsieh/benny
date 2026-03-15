@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight, ArrowDown} from "lucide-react";
+import Image from "next/image";
 
 const imageData = [
   { src: "/photo/feature_photo/img1.jpg", caption: "光影之間，一念生詩。" },
@@ -25,10 +26,13 @@ const PhotoSlider = ({ onScrollNext }) => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-gray-50">
-      <img
+      <Image
         src={imageData[index].src}
         alt={`Slide ${index + 1}`}
-        className="absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ease-in-out"
+        fill
+        sizes="100vw"
+        priority={index === 0}
+        className="object-contain transition-opacity duration-1000 ease-in-out"
       />
 
       {/* 詩句 caption */}

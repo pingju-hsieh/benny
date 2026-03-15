@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      'PingFang TC',
+      'Noto Sans TC',
+      'Microsoft JhengHei',
+      sans-serif;
+  }
+}
+
+@layer components {
+  .markdown {
+    @apply text-gray-800 leading-8;
+  }
+  .markdown h1 {
+    @apply text-3xl sm:text-4xl font-serif font-bold mt-10 mb-4 text-gray-900;
+  }
+  .markdown h2 {
+    @apply text-2xl sm:text-3xl font-serif font-semibold mt-10 mb-4 text-gray-900 border-b border-gray-200 pb-2;
+  }
+  .markdown h3 {
+    @apply text-xl sm:text-2xl font-serif font-semibold mt-8 mb-3 text-gray-900;
+  }
+  .markdown p {
+    @apply my-4;
+  }
+  .markdown a {
+    @apply text-amber-700 underline underline-offset-4 hover:text-amber-900;
+  }
+  .markdown blockquote {
+    @apply my-6 pl-4 border-l-4 border-amber-400 text-amber-800 italic bg-amber-50/70 py-2 rounded-r;
+  }
+  .markdown ul {
+    @apply my-4 list-disc pl-6;
+  }
+  .markdown ol {
+    @apply my-4 list-decimal pl-6;
+  }
+  .markdown li {
+    @apply my-1;
+  }
+  .markdown hr {
+    @apply my-10 border-gray-200;
+  }
+  .markdown code {
+    @apply px-1.5 py-0.5 rounded bg-gray-100 text-gray-900 text-sm;
+  }
+  .markdown pre {
+    @apply my-6 p-4 rounded-xl bg-gray-900 text-gray-100 overflow-x-auto;
+  }
+  .markdown pre code {
+    @apply bg-transparent p-0 text-gray-100;
+  }
+  .markdown img {
+    @apply my-8 rounded-xl shadow;
+  }
+  /* 單獨一行的斜體文字視為圖片 caption（配合 `![]()` 下一行 `_caption_` 的寫法） */
+  .markdown p > em {
+    @apply block text-center text-sm text-gray-500 mt-1 not-italic;
+  }
+}
+
+.markdown-zoom-content img {
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.markdown-zoom-content table {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffffff;
+}
+
+.markdown-zoom-content .markdown-zoom-btn {
+  display: none !important;
+}
+
