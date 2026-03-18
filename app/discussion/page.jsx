@@ -28,7 +28,7 @@ export default async function DiscussionPage() {
 </div>
 
 <p className="font-serif text-base md:text-lg text-stone-600 leading-loose whitespace-pre-line">
-  自由與管制的交界在哪裡？我試著紀錄對全球產業組織（Industrial Organization）、監管政策與制度的宏觀觀察。
+  自由與管制的交界在哪裡？我試著紀錄對產業組織（Industrial Organization）、監管政策與制度的觀察。
 </p>
 
         {posts.length === 0 ? (

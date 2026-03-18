@@ -4,7 +4,7 @@ import { Instagram, Mail, Github } from 'lucide-react';
 
 export const metadata = {
   title: 'Links',
-  description: '斑泥 Bānní 的導流頁面：文學日常、遊記攝影、經濟討論與合作諮詢入口。',
+  description: '斑泥 Bānní 的導流頁面：文字日常、遊記攝影、經濟討論與合作諮詢入口。',
 };
 
 export default function LinksPage() {
@@ -32,7 +32,7 @@ export default function LinksPage() {
             href="/salon"
             className="block w-full rounded-full border border-amber-700 text-amber-800 bg-white px-5 py-3 text-sm font-medium text-center hover:bg-amber-700 hover:text-white transition"
           >
-            📝 文學日常
+            📝 文字日常
           </Link>
 
           <Link
@@ -72,7 +72,7 @@ export default function LinksPage() {
         {/* Social icons */}
         <div className="mt-6 flex items-center justify-center gap-5 text-gray-500">
           <a
-            href="https://www.instagram.com/banni.walks"
+            href="https://www.instagram.com/banni_walks"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"

@@ -27,13 +27,13 @@ function getConfig(collection) {
     case 'Sentiment':
     default:
       return {
-        title: '文學日常',
+        title: '文字日常',
         text: '如果你也在這些文字中找到了共鳴的碎片，歡迎追蹤我的日常漫步，或給予我一點微小的支持。',
         supportNote:
           '你的追蹤與贊助，會成為我在異地持續寫詩、寫散文、完成第一本詩集的溫柔推力。',
         primaryType: 'external',
         primaryLabel: '追蹤 Instagram',
-        primaryHref: 'https://www.instagram.com/banni.walks',
+        primaryHref: 'https://www.instagram.com/banni_walks',
       };
   }
 }

@@ -3,7 +3,7 @@ import { getPostsByCollection } from '../../lib/posts';
 import SalonListClient from '../../components/SalonListClient';
 
 export const metadata = {
-  title: '文學日常',
+  title: '文字日常',
   description: '新詩、散文與生活記敘。',
 };
 
@@ -15,7 +15,7 @@ export default async function SalonPage() {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif text-[#333333] text-center mb-8 md:mb-12 border-b pb-3 tracking-wide md:tracking-wider leading-snug">
           <BookOpen className="inline-block w-8 h-8 mr-3 text-amber-600" />
-          文學日常
+          文字日常
         </h2>
 
         {posts.length === 0 ? (

@@ -11,14 +11,14 @@ const HERO_SUBTITLE =
 const SERVICES = [
   {
     id: 'academic',
-    title: '碩博留學諮詢（Academic Consulting）',
+    title: '歐洲碩士留學諮詢（Academic Consulting）',
     short: '歐陸與英國頂尖經濟碩士申請經驗。',
     badge: 'Academic',
     color: 'rose',
     details: [
       '具備深厚的歐陸留學經驗（荷蘭鹿特丹 Erasmus 交換一年），雅思 7 分。',
       '碩士Admission 包含：LSE EME、TSE MED、Sciences Po（Dual Degree）、Bocconi ESS、LMU MQE、Bonn Econ、EMJ M3EP。',
-      '可協助 ETE / MED 等頂尖經濟碩士申請策略、SOP / CV 潤飾與歐陸商管經濟名校選校規劃。',
+      '可協助 EME / MED 等頂尖經濟碩士申請策略、SOP / CV 建議與歐陸商管經濟名校選校分享。',
     ],
   },
   {
@@ -129,7 +129,7 @@ export default function ServicePage() {
             className="mt-6 flex items-center justify-center gap-4"
           >
             <a
-              href="https://www.instagram.com/banni.walks"
+              href="https://www.instagram.com/banni_walks"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full border border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-400 transition"

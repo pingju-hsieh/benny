@@ -27,9 +27,9 @@ export default function SiteLayout({ children }) {
 
   const navItems = [
     { name: '主頁', path: '/', icon: Home },
-    { name: '文學日常', path: '/salon', icon: BookOpen },
-    { name: '遊記攝影', path: '/travel', icon: Camera },
     { name: '經濟討論', path: '/discussion', icon: Lamp },
+    { name: '文字日常', path: '/salon', icon: BookOpen },
+    { name: '遊記攝影', path: '/travel', icon: Camera },
     { name: '合作諮詢', path: '/service', icon: Briefcase },
     { name: '所有文章', path: '/blog', icon: BookOpen },
     { name: '關於', path: '/about', icon: User },

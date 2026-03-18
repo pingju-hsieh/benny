@@ -5,7 +5,7 @@ import { Clock } from 'lucide-react';
 
 const COLLECTION_META = {
   Life: {
-    label: '文學日常',
+    label: '文字日常',
     view: '/salon',
     colorClass: 'text-amber-700 border-amber-700 bg-amber-100',
     hoverBorderClass: 'hover:border-amber-500',

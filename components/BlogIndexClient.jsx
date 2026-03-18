@@ -6,7 +6,7 @@ import { Filter } from 'lucide-react';
 
 const COLLECTION_STYLES = {
   Life: {
-    label: '文學日常',
+    label: '文字日常',
     className: 'bg-amber-100 text-amber-700',
   },
   Travel: {

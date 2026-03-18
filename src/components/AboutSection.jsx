@@ -28,23 +28,18 @@ const AboutSection = React.memo(function AboutSection({ onNavigate }) {
         </div>
         <div className="text-gray-700 space-y-4">
           <p className="text-xl font-serif text-gray-800">斑泥 Bānní</p>
+          <p className="leading-relaxed">在理性的模型裡，尋找感性的餘溫。</p>
           <p className="leading-relaxed">
-            一個熱愛文字與旅遊的靈魂。我的世界由三個維度構成：
-            <span className="text-amber-600 font-semibold">詩文與日常</span>，
-            探討人性的光影與哲學的深度；
-            <span className="text-blue-600 font-semibold">旅遊與攝影</span>，
-            記錄下地球上每一幀令人屏息的瞬間；
+            我的世界交織於三個座標：
+            <span className="text-amber-600 font-semibold">文字與詩</span>，捕捉人性的光影；
+            <span className="text-blue-600 font-semibold">攝影與旅遊</span>，凝視世界的靜謐；
             以及
-            <span className="text-green-600 font-semibold">經濟與討論</span>，
-            嘗試以理性邏輯解讀世界脈絡。
-          </p>
-          <p className="leading-relaxed">
-            這裡不僅是我的作品集，更是一個開放的空間，邀請你一同漫步在理性和感性的邊界。
+            <span className="text-green-600 font-semibold">經濟分析</span>，拆解市場的機制與賽局。
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <span className="text-sm text-gray-500 flex items-center">
               <BookOpen className="w-4 h-4 mr-1 text-amber-500" />
-              文學：新詩、散文
+              文學：新詩、日常
             </span>
             <span className="text-sm text-gray-500 flex items-center">
               <Camera className="w-4 h-4 mr-1 text-blue-500" />
