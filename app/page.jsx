@@ -55,15 +55,15 @@ export default function HomePage() {
             {PEN_NAME}
           </h1>
 
-          <p
+          {/* <p
             className="text-xl sm:text-2xl md:text-3xl text-gray-600 tracking-wide md:tracking-wider leading-snug md:leading-relaxed mt-4 cursor-pointer hover:text-amber-700 transition duration-300"
             onClick={scrollToContent}
           >
-            在理性的模型裡，尋找感性的餘溫。
+            在理性的模型裡，尋找感性的餘溫
           </p>
           <p className="mt-4 md:mt-6 text-base sm:text-lg text-gray-500 tracking-wide max-w-2xl mx-auto">
             我的世界交織於三個座標：文學與詩，捕捉人性的光影；攝影與旅遊，凝視世界的靜謐；以及經濟分析，拆解市場的機制與賽局。
-          </p>
+          </p> */}
           <p className="mt-3 text-sm text-gray-400 tracking-wide">—— 向下探索 ——</p>
           <div className="mt-12">
             <ArrowDown

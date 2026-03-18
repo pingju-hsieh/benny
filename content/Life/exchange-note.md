@@ -7,7 +7,7 @@ info:
 author: 斑泥 Bānní
 thumbnail: 1.png
 tags:
-  - 出國交換
+  - 交換
   - 台大
 ---
 
