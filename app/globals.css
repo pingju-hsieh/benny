@@ -35,7 +35,7 @@
     @apply text-amber-700 underline underline-offset-4 hover:text-amber-900;
   }
   .markdown blockquote {
-    @apply my-6 pl-4 border-l-4 border-amber-400 text-amber-800 italic bg-amber-50/70 py-2 rounded-r;
+    @apply my-6 pl-4 border-l-4 border-gray-300 text-gray-700 italic bg-gray-50 py-2 rounded-r;
   }
   .markdown ul {
     @apply my-4 list-disc pl-6;
@@ -85,5 +85,173 @@
 
 .markdown-zoom-content .markdown-zoom-btn {
   display: none !important;
+}
+
+/* 攝影集：保留所有 Markdown 格式，不使用 prose */
+.gallery-content {
+  @apply text-gray-800 leading-8;
+}
+.gallery-content h1 {
+  @apply text-3xl sm:text-4xl font-serif font-bold mt-10 mb-4 text-gray-900;
+}
+.gallery-content h2 {
+  @apply text-2xl sm:text-3xl font-serif font-semibold mt-10 mb-4 text-gray-900 border-b border-gray-200 pb-2;
+}
+.gallery-content h3 {
+  @apply text-xl sm:text-2xl font-serif font-semibold mt-8 mb-3 text-gray-900;
+}
+.gallery-content p {
+  @apply my-4;
+}
+.gallery-content a {
+  @apply text-amber-700 underline underline-offset-4 hover:text-amber-900;
+}
+.gallery-content blockquote {
+  @apply my-6 pl-4 border-l-4 border-gray-300 text-gray-700 italic bg-gray-50 py-2 rounded-r;
+}
+.gallery-content ul {
+  @apply my-4 list-disc pl-6;
+}
+.gallery-content ol {
+  @apply my-4 list-decimal pl-6;
+}
+.gallery-content li {
+  @apply my-1;
+}
+.gallery-content hr {
+  @apply my-10 border-gray-200;
+}
+.gallery-content code {
+  @apply px-1.5 py-0.5 rounded bg-gray-100 text-gray-900 text-sm;
+}
+.gallery-content pre {
+  @apply my-6 p-4 rounded-xl bg-gray-900 text-gray-100 overflow-x-auto;
+}
+.gallery-content pre code {
+  @apply bg-transparent p-0 text-gray-100;
+}
+.gallery-content strong {
+  @apply font-bold text-gray-900;
+}
+/* 攝影集 VerticalScrollGallery：文字區塊與負空間文字皆用與 markdown 相同樣式 */
+.vertical-gallery-text-block,
+.vertical-gallery-sidebar-text {
+  @apply text-gray-800 leading-8;
+}
+.vertical-gallery-text-block h1,
+.vertical-gallery-sidebar-text h1 {
+  @apply text-3xl sm:text-4xl font-serif font-bold mt-10 mb-4 text-gray-900;
+}
+.vertical-gallery-text-block h2,
+.vertical-gallery-sidebar-text h2 {
+  @apply text-2xl sm:text-3xl font-serif font-semibold mt-10 mb-4 text-gray-900 border-b border-gray-200 pb-2;
+}
+.vertical-gallery-text-block h3,
+.vertical-gallery-sidebar-text h3 {
+  @apply text-xl sm:text-2xl font-serif font-semibold mt-8 mb-3 text-gray-900;
+}
+.vertical-gallery-text-block p,
+.vertical-gallery-sidebar-text p {
+  @apply my-4;
+}
+.vertical-gallery-text-block a,
+.vertical-gallery-sidebar-text a {
+  @apply text-amber-700 underline underline-offset-4 hover:text-amber-900;
+}
+.vertical-gallery-text-block blockquote,
+.vertical-gallery-sidebar-text blockquote {
+  @apply my-6 pl-4 border-l-4 border-gray-300 text-gray-700 italic bg-gray-50 py-2 rounded-r;
+}
+.vertical-gallery-text-block ul,
+.vertical-gallery-sidebar-text ul {
+  @apply my-4 list-disc pl-6;
+}
+.vertical-gallery-text-block ol,
+.vertical-gallery-sidebar-text ol {
+  @apply my-4 list-decimal pl-6;
+}
+.vertical-gallery-text-block li,
+.vertical-gallery-sidebar-text li {
+  @apply my-1;
+}
+.vertical-gallery-text-block hr,
+.vertical-gallery-sidebar-text hr {
+  @apply my-10 border-gray-200;
+}
+.vertical-gallery-text-block code,
+.vertical-gallery-sidebar-text code {
+  @apply px-1.5 py-0.5 rounded bg-gray-100 text-gray-900 text-sm;
+}
+.vertical-gallery-text-block pre,
+.vertical-gallery-sidebar-text pre {
+  @apply my-6 p-4 rounded-xl bg-gray-900 text-gray-100 overflow-x-auto;
+}
+.vertical-gallery-text-block pre code,
+.vertical-gallery-sidebar-text pre code {
+  @apply bg-transparent p-0 text-gray-100;
+}
+.vertical-gallery-text-block strong,
+.vertical-gallery-sidebar-text strong {
+  @apply font-bold text-gray-900;
+}
+/* 負空間文字欄位：與主文同尺寸，可彈性伸展 */
+.vertical-gallery-sidebar-text {
+  @apply flex-1 min-w-0;
+}
+
+/* 攝影集側邊欄：標題縮小以適應寬度 */
+.gallery-sidebar h1 {
+  @apply text-xl font-serif font-bold mt-6 mb-2;
+}
+.gallery-sidebar h2 {
+  @apply text-lg font-serif font-semibold mt-6 mb-2 border-b border-gray-200 pb-1;
+}
+.gallery-sidebar h3 {
+  @apply text-base font-serif font-semibold mt-4 mb-1;
+}
+.gallery-sidebar p {
+  @apply my-2 text-sm;
+}
+.gallery-sidebar blockquote {
+  @apply my-4 pl-3 border-l-4 border-gray-300 text-gray-700 italic text-sm py-1 rounded-r bg-gray-50;
+}
+.gallery-sidebar ul,
+.gallery-sidebar ol {
+  @apply my-2 pl-4 text-sm;
+}
+.gallery-sidebar li {
+  @apply my-0.5;
+}
+
+/* 新詩模式：保留空白行與 H2 */
+/* 同段（單行間）間距小於不同段（段落間）間距 */
+.poetry-content {
+  @apply leading-[1.9];
+}
+.poetry-content p {
+  @apply my-4;
+}
+.poetry-content p:first-child {
+  @apply mt-0;
+}
+.poetry-content .poetry-stanza-gap {
+  @apply my-4 h-0 border-0 p-0 overflow-hidden;
+}
+.poetry-content h2 {
+  @apply text-xl font-serif font-semibold mt-10 mb-4 text-gray-800 border-b border-gray-200 pb-2;
+}
+.poetry-content h3 {
+  @apply text-lg font-serif font-semibold mt-8 mb-3 text-gray-800;
+}
+.poetry-content img {
+  @apply my-6 rounded-lg shadow max-w-full h-auto;
+}
+
+/* 新詩模式：列印時隱藏詩箋內容（防拷貝） */
+@media print {
+  .poetry-sheet,
+  .poetry-sheet * {
+    display: none !important;
+  }
 }
 

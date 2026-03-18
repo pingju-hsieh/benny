@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Maximize2, X } from 'lucide-react';
 
-export default function MarkdownInteractive({ html }) {
+export default function MarkdownInteractive({ html, gallery = false }) {
   const [overlay, setOverlay] = useState(null);
 
   useEffect(() => {
@@ -44,7 +44,8 @@ export default function MarkdownInteractive({ html }) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className =
-        'markdown-zoom-btn absolute bottom-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-gray-800 shadow hover:bg-amber-50 transition text-lg font-semibold';
+        'markdown-zoom-btn absolute bottom-2 right-2 inline-flex items-center justify-center rounded-full bg-white/95 text-gray-800 shadow hover:bg-amber-50 transition text-lg font-semibold ' +
+        (gallery ? 'h-10 w-10' : 'h-8 w-8');
       btn.setAttribute('aria-label', '放大檢視');
       btn.innerText = '⤢';
       wrapper.appendChild(btn);
@@ -80,11 +81,14 @@ export default function MarkdownInteractive({ html }) {
     return () => {
       // overlay 關閉或內容改變時，由 React 重新渲染並再套用效果
     };
-  }, [html, overlay]);
+  }, [html, overlay, gallery]);
 
   return (
     <>
-      <div className="markdown markdown-interactive-root" dangerouslySetInnerHTML={{ __html: html }} />
+      <div
+        className={`markdown markdown-interactive-root ${gallery ? 'markdown-gallery' : ''}`}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
 
       {overlay && (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center px-4">
