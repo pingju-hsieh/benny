@@ -195,7 +195,7 @@ export default function VerticalScrollGallery({ blocks, title, info }) {
           return (
             <div
               key={`img-${img.index}`}
-              className="relative w-[100vw] h-[80vh] min-h-[400px] overflow-hidden"
+              className="relative w-[100vw] h-[calc(100vh-5rem)] min-h-[360px] overflow-hidden"
               style={{ marginLeft: 'calc(50% - 50vw)' }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}

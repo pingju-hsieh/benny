@@ -1005,6 +1005,9 @@ video {
 .h-screen {
   height: 100vh;
 }
+.h-\[calc\(100vh-5rem\)\] {
+  height: calc(100vh - 5rem);
+}
 .max-h-\[70vh\] {
   max-height: 70vh;
 }
@@ -1022,6 +1025,12 @@ video {
 }
 .min-h-screen {
   min-height: 100vh;
+}
+.min-h-\[calc\(100vh-5rem\)\] {
+  min-height: calc(100vh - 5rem);
+}
+.min-h-\[360px\] {
+  min-height: 360px;
 }
 .w-10 {
   width: 2.5rem;
@@ -1497,6 +1506,10 @@ video {
 .p-8 {
   padding: 2rem;
 }
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1569,10 +1582,6 @@ video {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
-}
 .pb-16 {
   padding-bottom: 4rem;
 }
@@ -1590,6 +1599,9 @@ video {
 }
 .pt-2 {
   padding-top: 0.5rem;
+}
+.pt-20 {
+  padding-top: 5rem;
 }
 .pt-24 {
   padding-top: 6rem;
@@ -2575,10 +2587,6 @@ video {
     padding: 2.5rem;
   }
 
-  .sm\:p-14 {
-    padding: 3.5rem;
-  }
-
   .sm\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
@@ -2587,6 +2595,11 @@ video {
   .sm\:px-10 {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
+  }
+
+  .sm\:px-14 {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
   }
 
   .sm\:px-6 {
@@ -2617,11 +2630,6 @@ video {
   .sm\:py-7 {
     padding-top: 1.75rem;
     padding-bottom: 1.75rem;
-  }
-
-  .sm\:px-14 {
-    padding-left: 3.5rem;
-    padding-right: 3.5rem;
   }
 
   .sm\:py-8 {

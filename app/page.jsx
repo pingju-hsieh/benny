@@ -81,13 +81,6 @@ export default function HomePage() {
           <AboutSection onNavigate={(path) => router.push(path)} />
         </div>
       </div>
-
-      <button
-        onClick={() => router.push('/')}
-        className="fixed bottom-6 right-6 bg-amber-500 text-white px-4 py-2 z-20 rounded-full shadow-lg hover:bg-amber-600 transition flex items-center"
-      >
-        回主頁
-      </button>
     </>
   );
 }

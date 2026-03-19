@@ -159,6 +159,15 @@ export default function SiteLayout({ children }) {
 
       <main className="min-h-[100vh]">{children}</main>
 
+      <button
+        type="button"
+        onClick={() => (pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : go('/'))}
+        className="fixed bottom-6 right-6 bg-amber-500 text-white px-4 py-2 z-20 rounded-full shadow-lg hover:bg-amber-600 transition flex items-center"
+        aria-label="回主頁"
+      >
+        回主頁
+      </button>
+
       <footer className="w-full py-8 border-t border-gray-200 mt-auto bg-white">
         <div className="max-w-7xl mx-auto text-center text-sm text-gray-500 px-4">
           <p>

@@ -16,10 +16,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/latest-works/route.js"
     ],
+    "/discussion/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/discussion/page.js"
+    ],
+    "/salon/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/salon/page.js"
+    ],
     "/travel/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/travel/page.js"
+    ],
+    "/service/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/service/page.js"
     ],
     "/posts/[slug]/not-found": [
       "static/chunks/webpack.js",
@@ -31,35 +46,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/posts/[slug]/page.js"
     ],
-    "/discussion/page": [
+    "/about/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/discussion/page.js"
-    ],
-    "/salon/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/salon/page.js"
-    ],
-    "/content/[...path]/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/content/[...path]/route.js"
-    ],
-    "/service/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/service/page.js"
+      "static/chunks/app/about/page.js"
     ],
     "/blog/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/blog/page.js"
     ],
-    "/about/page": [
+    "/content/[...path]/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/about/page.js"
+      "static/chunks/app/content/[...path]/route.js"
     ]
   }
 }
