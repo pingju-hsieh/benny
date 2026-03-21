@@ -38,7 +38,7 @@ const ServicePreviewSection = () => {
         </h2>
         <div className="w-24 h-0.5 bg-amber-500 mx-auto mb-6" />
         <p className="text-base sm:text-lg text-gray-700 leading-relaxed max-w-2xl mx-auto">
-          跨越學術與實務的邊界，將硬核的經濟邏輯轉化為商業洞察與文字溫度。
+          跨越學術與實務的邊界，將艱深的經濟邏輯轉化為商業洞察與文字溫度。
         </p>
       </div>
 
