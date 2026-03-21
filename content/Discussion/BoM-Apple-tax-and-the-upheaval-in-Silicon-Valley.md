@@ -5,7 +5,7 @@ category: 經濟視角
 series: 專欄｜市場的邊界  # 這是一個可選欄位
 info: "深度拆解歐盟《數位市場法》(DMA) 的經濟與商業邏輯"
 author: "斑泥 Bānní"
-thumbnail: 
+thumbnail: thumbnail.png
 tags:
   - IO
   - 反壟斷
