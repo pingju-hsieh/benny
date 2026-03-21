@@ -17,6 +17,7 @@ export async function GET() {
     { loc: `${site}/sentiment`, changefreq: 'weekly', priority: '0.7' },
     { loc: `${site}/blog`, changefreq: 'daily', priority: '0.9' },
     { loc: `${site}/about`, changefreq: 'yearly', priority: '0.4' },
+    { loc: `${site}/promote`, changefreq: 'monthly', priority: '0.5' },
   ];
 
   const postUrls = posts.map((p) => ({

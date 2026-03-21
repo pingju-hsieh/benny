@@ -67,7 +67,7 @@ export default function TravelListClient({ posts }) {
                       </span>
                     ) : null}
                     {post.series ? (
-                      <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-serif tracking-[0.18em] text-amber-800">
+                      <span className="text-xs sm:text-sm font-serif font-bold text-amber-700 tracking-wide">
                         {post.series}
                       </span>
                     ) : null}
@@ -77,13 +77,8 @@ export default function TravelListClient({ posts }) {
                   </div>
 
                   <h3 className="text-2xl font-serif text-gray-800 mb-2">{post.title}</h3>
-                  {post.info ? <p className="text-sm text-gray-600 mb-2">{post.info}</p> : null}
-
-                  {post.excerpt ? (
-                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
-                      {post.excerpt}
-                      {post.excerpt.length >= 180 ? '…' : ''}
-                    </p>
+                  {post.info ? (
+                    <p className="text-sm text-gray-600 leading-relaxed">{post.info}</p>
                   ) : null}
                 </div>
               </Link>

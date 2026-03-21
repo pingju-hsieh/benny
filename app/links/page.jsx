@@ -60,7 +60,7 @@ export default function LinksPage() {
         {/* Support button */}
         <div className="mt-5">
           <a
-            href="https://www.buymeacoffee.com/banni"
+            href="https://www.buymeacoffee.com/banni.walks"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full rounded-full bg-amber-50 border border-amber-200 text-amber-800 px-5 py-3 text-sm font-medium text-center hover:bg-amber-100 transition"

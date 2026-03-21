@@ -10,15 +10,15 @@ import PostFooterCTA from '../../../components/PostFooterCTA';
 const COLLECTION_STYLES = {
   Life: {
     label: '文字日常',
-    className: 'bg-amber-100 text-amber-700',
+    categoryTextClass: 'text-amber-800',
   },
   Travel: {
     label: '遊記攝影',
-    className: 'bg-blue-100 text-blue-700',
+    categoryTextClass: 'text-blue-700',
   },
   Discussion: {
     label: '經濟討論',
-    className: 'bg-green-100 text-green-700',
+    categoryTextClass: 'text-green-700',
   },
 };
 
@@ -26,7 +26,7 @@ function getCollectionStyle(collection) {
   return (
     COLLECTION_STYLES[collection] || {
       label: collection || '其他',
-      className: 'bg-gray-100 text-gray-700',
+      categoryTextClass: 'text-gray-600',
     }
   );
 }
@@ -117,24 +117,19 @@ export default async function PostPage({ params }) {
 
   // 新詩模式：tag 含「詩文」或 category 新詩，琥珀色詩箋 + 防拷貝
   if (isPoetryLayout) {
+    const collStyle = post.collection ? getCollectionStyle(post.collection) : null;
     return (
       <div className="max-w-2xl mx-auto py-16 px-4 poetry-sheet-wrapper">
         <header className="mb-8">
-          <div className="flex flex-wrap items-center gap-2">
-            {post.collection ? (() => {
-              const style = getCollectionStyle(post.collection);
-              return (
-                <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${style.className}`}>
-                  {style.label}
-                </span>
-              );
-            })() : null}
-            {post.category ? (
-              <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-800">
-                {post.category}
-              </span>
-            ) : null}
-          </div>
+          {post.category ? (
+            <p
+              className={`text-xs font-semibold sm:text-sm ${
+                collStyle ? collStyle.categoryTextClass : 'text-amber-800'
+              }`}
+            >
+              {post.category}
+            </p>
+          ) : null}
         </header>
         <PoetryPostContent
           html={html}
@@ -148,44 +143,43 @@ export default async function PostPage({ params }) {
     );
   }
 
-  // 標準模式
+  // 標準模式：category 與 series 同一列（中間留一格間距）；作者／日期在下方
+  const collStyle = post.collection ? getCollectionStyle(post.collection) : null;
   return (
     <div className="max-w-3xl mx-auto py-16 px-4">
       <header className="mb-10">
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          {post.collection ? (() => {
-            const style = getCollectionStyle(post.collection);
-            return (
-              <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full ${style.className}`}>
-                {style.label}
+        {post.category || post.series ? (
+          <div className="mb-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            {post.category ? (
+              <span
+                className={`text-xs font-semibold sm:text-sm ${
+                  collStyle ? collStyle.categoryTextClass : 'text-gray-600'
+                }`}
+              >
+                {post.category}
               </span>
-            );
-          })() : null}
-          {post.category ? (
-            <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-700">
-              {post.category}
-            </span>
-          ) : null}
-          {post.series ? (
-            <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-serif tracking-[0.18em] text-amber-800">
-              {post.series}
-            </span>
-          ) : null}
-        </div>
+            ) : null}
+            {post.series ? (
+              <span className="text-xs font-serif font-bold tracking-wide text-amber-700 sm:text-sm">
+                {post.series}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-wide leading-snug md:leading-tight mb-4 text-[#333333]">
           {post.title}
         </h1>
         {post.info ? <p className="text-lg text-gray-600 leading-relaxed mb-2">{post.info}</p> : null}
         {(post.author || post.dateDisplay || post.date) ? (
-          <p className="text-sm text-gray-500 flex items-center gap-2">
+          <p className="flex items-center gap-2 text-sm text-gray-500">
             {post.author ? (
               <>
-                <User className="w-4 h-4" />
+                <User className="h-4 w-4" />
                 <span>{post.author}</span>
               </>
             ) : null}
-            {(post.dateDisplay || post.date) ? (
+            {post.dateDisplay || post.date ? (
               <span>
                 {post.author ? '・' : null}
                 發表於{post.dateDisplay || post.date}

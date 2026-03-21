@@ -15,6 +15,7 @@ const NAV_THEME = {
   '/blog': { active: 'bg-amber-600 text-white shadow-md', hover: 'hover:text-amber-700 hover:bg-amber-50' },
   '/service': { active: 'bg-amber-700 text-white shadow-md', hover: 'hover:text-amber-700 hover:bg-amber-50' },
   '/about': { active: 'bg-gray-800 text-white shadow-md', hover: 'hover:text-gray-900 hover:bg-gray-100' },
+  '/promote': { active: 'bg-amber-600 text-white shadow-md', hover: 'hover:text-amber-700 hover:bg-amber-50' },
   '/': { active: 'bg-amber-600 text-white shadow-md', hover: 'hover:text-amber-700 hover:bg-amber-50' },
 };
 
@@ -151,7 +152,7 @@ export default function SiteLayout({ children }) {
             </nav>
 
             <div className="px-5 pb-6 border-t border-gray-100">
-              <AdBanner />
+              <AdBanner onInternalNavigate={() => setOpen(false)} />
             </div>
           </aside>
         </div>
@@ -162,7 +163,7 @@ export default function SiteLayout({ children }) {
       <button
         type="button"
         onClick={() => (pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : go('/'))}
-        className="fixed bottom-6 right-6 bg-amber-500 text-white px-4 py-2 z-20 rounded-full shadow-lg hover:bg-amber-600 transition flex items-center"
+        className="fixed bottom-6 left-6 z-20 flex items-center rounded-full bg-amber-500 px-4 py-2 text-white shadow-lg transition hover:bg-amber-600"
         aria-label="回主頁"
       >
         回主頁

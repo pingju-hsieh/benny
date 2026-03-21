@@ -1,7 +1,7 @@
 ---
-title: "[交換記] 我去巴黎當志工啦！Emmaüs志工營經驗分享"
+title: "我去巴黎當志工啦！Emmaüs志工營經驗分享"
 date: 2022-08-25 22:01:51
-category: 遊記
+category: 
 series: 交換記
 info: "在塞納河中的小島bougival上，用一週時間的志工認識法國。"
 thumbnail: 10.jpeg

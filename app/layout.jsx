@@ -2,6 +2,7 @@ import './globals.css';
 import Script from 'next/script';
 import { Noto_Serif_TC } from 'next/font/google';
 import SiteLayout from '../components/SiteLayout';
+import BuyMeACoffeeWidget from '../components/BuyMeACoffeeWidget';
 
 const SITE_NAME = '斑泥走走';
 const SITE_DESC = '文學、旅行攝影與經濟思辨的個人創作網站。';
@@ -74,6 +75,7 @@ export default function RootLayout({ children }) {
         </Script>
 
         <SiteLayout>{children}</SiteLayout>
+        <BuyMeACoffeeWidget />
       </body>
     </html>
   );

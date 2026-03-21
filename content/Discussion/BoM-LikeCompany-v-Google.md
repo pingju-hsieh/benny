@@ -1,7 +1,7 @@
 ---
 title: "AI 摘要是「重製」嗎？盧森堡聽證會後的法理裂痕"
 date: 2026-03-21
-category: 經濟視角
+category: 
 series: 專欄｜市場的邊界
 info: "解析歐盟 AI 版權第一案(C-250/25: Like Company v. Google)：鄰接權如何從媒體防線變成了 Big Tech 的競爭門檻，看歐盟如何在全球 AI 賽局中強行修正市場失靈"
 author: "斑泥 Bānní"

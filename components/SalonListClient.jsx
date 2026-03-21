@@ -68,7 +68,7 @@ export default function SalonListClient({ posts }) {
                       </span>
                     ) : null}
                     {post.series ? (
-                      <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-serif tracking-[0.18em] text-amber-800">
+                      <span className="text-xs sm:text-sm font-serif font-bold text-amber-700 tracking-wide">
                         {post.series}
                       </span>
                     ) : null}
