@@ -255,3 +255,30 @@
   }
 }
 
+/* 右下角：Buy Me a Coffee 與「回主頁」同為 56×56 圓形、與 SiteLayout 的 right-6 對齊 */
+:root {
+  --fab-size: 56px;
+  --fab-edge: 1.5rem;
+}
+
+#bmc-wbtn {
+  width: var(--fab-size) !important;
+  height: var(--fab-size) !important;
+  min-width: var(--fab-size) !important;
+  min-height: var(--fab-size) !important;
+  border-radius: 9999px !important;
+  padding: 0 !important;
+  right: var(--fab-edge) !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#bmc-wbtn img,
+#bmc-wbtn svg {
+  width: 28px !important;
+  height: 28px !important;
+  object-fit: contain !important;
+}
+

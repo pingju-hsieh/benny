@@ -1,8 +1,7 @@
 {
+  "/page": "app/page.js",
+  "/discussion/page": "app/discussion/page.js",
   "/posts/[slug]/page": "app/posts/[slug]/page.js",
-  "/travel/page": "app/travel/page.js",
   "/service/page": "app/service/page.js",
-  "/salon/page": "app/salon/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/discussion/page": "app/discussion/page.js"
+  "/salon/page": "app/salon/page.js"
 }

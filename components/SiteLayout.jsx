@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { BookOpen, Camera, Lamp, Home, User, Heart, Menu, X, Briefcase } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdBanner from './AdBanner';
 
 const PEN_NAME = '斑泥走走';
@@ -43,9 +43,31 @@ export default function SiteLayout({ children }) {
 
   const isHome = pathname === '/';
 
+  const isPromotePage = pathname === '/promote';
+
+  /** 漫步推薦：鎖定整頁捲動，只讓清單欄內部捲動 */
+  useEffect(() => {
+    if (!isPromotePage) return undefined;
+    const html = document.documentElement;
+    const prevBody = document.body.style.overflow;
+    const prevHtml = html.style.overflow;
+    document.body.style.overflow = 'hidden';
+    html.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevBody;
+      html.style.overflow = prevHtml;
+    };
+  }, [isPromotePage]);
+
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-50 transition-all duration-300 bg-white shadow-md text-[#333333]">
+    <div
+      className={
+        isPromotePage
+          ? 'flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden'
+          : 'flex min-h-screen flex-col'
+      }
+    >
+      <header className="sticky top-0 z-50 shrink-0 transition-all duration-300 bg-white shadow-md text-[#333333]">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <button
             type="button"
@@ -158,18 +180,27 @@ export default function SiteLayout({ children }) {
         </div>
       )}
 
-      <main className="min-h-[100vh]">{children}</main>
+      <main
+        className={
+          isPromotePage
+            ? 'flex min-h-0 flex-1 flex-col overflow-hidden'
+            : 'min-h-[100vh]'
+        }
+      >
+        {children}
+      </main>
 
       <button
         type="button"
         onClick={() => (pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : go('/'))}
-        className="fixed bottom-6 left-6 z-20 flex items-center rounded-full bg-amber-500 px-4 py-2 text-white shadow-lg transition hover:bg-amber-600"
+        className="fixed bottom-6 right-6 z-20 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-amber-500 text-white shadow-lg transition hover:bg-amber-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
         aria-label="回主頁"
+        title="回主頁"
       >
-        回主頁
+        <Home className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden />
       </button>
 
-      <footer className="w-full py-8 border-t border-gray-200 mt-auto bg-white">
+      <footer className="mt-auto w-full shrink-0 border-t border-gray-200 bg-white py-8">
         <div className="max-w-7xl mx-auto text-center text-sm text-gray-500 px-4">
           <p>
             © {new Date().getFullYear()} {PEN_NAME} | 個人創作 | 版權所有

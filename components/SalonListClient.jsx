@@ -87,7 +87,6 @@ export default function SalonListClient({ posts }) {
                   {post.excerpt ? (
                     <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line line-clamp-3">
                       {post.excerpt}
-                      {post.excerpt.length >= 180 ? '…' : ''}
                     </p>
                   ) : null}
                 </div>

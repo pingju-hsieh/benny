@@ -53,17 +53,21 @@ const ParticlesCanvas = ({ canvasRef }) => {
         }
       }
 
+      // 與 ctx.setTransform(dpr,…) 一致：座標必須用「邏輯像素」，不可用 canvas.width（裝置像素）
+      const lw = canvas.width / dpr;
+      const lh = canvas.height / dpr;
+
       particles.length = 0;
       for (let i = 0; i < points.length; i++) {
         const p = points[i];
         particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
+          x: Math.random() * lw,
+          y: Math.random() * lh,
           ox: p.x,
           oy: p.y,
           vx: 0,
           vy: 0,
-          alpha: 0,        // 新增透明度
+          alpha: 0,
         });
       }
 
@@ -92,10 +96,11 @@ const ParticlesCanvas = ({ canvasRef }) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const elapsed = (time - startTime) / 1000;
-      if (elapsed < 1.5) {
+      // 略快開始聚合、總時長較短（原本 1.5s～3s 偏慢且易覺得從單側湧入）
+      if (elapsed < 0.45) {
         revealProgress = 0;
-      } else if (elapsed < 3) {
-        revealProgress = (elapsed - 1.5) / 1.5; // 緩慢聚合
+      } else if (elapsed < 1.65) {
+        revealProgress = (elapsed - 0.45) / 1.2;
       } else {
         revealProgress = 1;
       }
@@ -106,11 +111,10 @@ const ParticlesCanvas = ({ canvasRef }) => {
         p.vx += (Math.random() - 0.5) * jitter;
         p.vy += (Math.random() - 0.5) * jitter;
 
-        // 聚合力隨時間變強
+        // 聚合力隨時間變強（座標修正後可略提高，收斂更乾淨）
         const dx = p.ox - p.x;
         const dy = p.oy - p.y;
-        // 聚合力略微放大，讓漂浮後能更有節奏地回到字型
-        const attract = isMobile ? 0.012 : 0.014;
+        const attract = isMobile ? 0.016 : 0.019;
         p.vx += dx * attract * revealProgress;
         p.vy += dy * attract * revealProgress;
 

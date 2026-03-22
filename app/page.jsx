@@ -17,21 +17,38 @@ export default function HomePage() {
   const [scrollY, setScrollY] = useState(0);
   const contentRef = useRef(null);
 
-  const handleScroll = useCallback(() => setScrollY(window.scrollY), []);
+  /** 捲動驅動的 transform 不要用 CSS transition，否則與每幀捲動值打架，回到頂部時會瘋狂抖動 */
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+    let ticking = false;
+    const flush = () => {
+      ticking = false;
+      const y = window.scrollY;
+      setScrollY(y < 0 ? 0 : y);
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(flush);
+      }
+    };
+    flush();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const scrollToContent = useCallback(() => {
     if (contentRef.current) window.scrollTo({ top: contentRef.current.offsetTop, behavior: 'smooth' });
   }, []);
 
-  const canvasParallaxStyle = useMemo(
-    () => ({ transform: `translateY(${scrollY * 0.4}px)`, opacity: 1 - scrollY / 500 }),
+  const canvasParallaxStyle = useMemo(() => {
+    const y = scrollY;
+    const opacity = Math.min(1, Math.max(0, 1 - y / 500));
+    return { transform: `translate3d(0, ${y * 0.4}px, 0)`, opacity };
+  }, [scrollY]);
+  const infoParallaxStyle = useMemo(
+    () => ({ transform: `translate3d(0, ${scrollY * 0.2}px, 0)` }),
     [scrollY]
   );
-  const infoParallaxStyle = useMemo(() => ({ transform: `translateY(${scrollY * 0.2}px)` }), [scrollY]);
   const lightEffectStyle = {
     background:
       'radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.7) 50%, rgba(250, 250, 250, 0.0) 100%)',
@@ -41,14 +58,14 @@ export default function HomePage() {
     <>
       <div className={`relative w-full h-[100vh] flex items-center justify-center text-center overflow-hidden ${BG_COLOR}`}>
         <div
-          className="absolute inset-0 w-full h-full z-0 transition-transform duration-100 ease-out"
+          className="absolute inset-0 z-0 h-full w-full will-change-transform"
           style={{ ...lightEffectStyle, ...canvasParallaxStyle }}
         >
           <ParticlesCanvas canvasRef={canvasRef} />
         </div>
 
         <div
-          className="relative z-10 px-6 py-12 sm:py-14 sm:px-10 md:p-12 max-w-4xl text-[#333333] transition-transform duration-100 ease-out"
+          className="relative z-10 max-w-4xl px-6 py-12 text-center text-[#333333] will-change-transform sm:px-10 sm:py-14 md:p-12"
           style={infoParallaxStyle}
         >
           <h1 className="text-6xl sm:text-7xl md:text-8xl font-serif font-extrabold mb-4 md:mb-6 tracking-wide md:tracking-widest leading-snug md:leading-tight pointer-events-none select-none h-[140px] sm:h-[160px] md:h-[190px] text-[#333333] opacity-0">

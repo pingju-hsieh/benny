@@ -6,7 +6,7 @@ import { Instagram, Linkedin, Github, ChevronDown, ChevronUp, Mail } from 'lucid
 
 const HERO_TITLE = '合作諮詢';
 const HERO_SUBTITLE =
-  '畢業於台大經濟系（輔系數學）目前於 TSE（圖盧茲經濟學院）攻讀應用數學與經濟決策碩士，專注於 Industrial Organization（IO）與實證分析研究。';
+  '畢業於台大經濟系，目前於 TSE（圖盧茲經濟學院）攻讀應用數學與經濟決策碩士，專注於 Industrial Organization（IO）與實證分析研究。現擔任法國教育中心大使';
 
 const SERVICES = [
   {
@@ -37,11 +37,11 @@ const SERVICES = [
   {
     id: 'writing',
     title: '跨領域撰文與專欄（Writing & Commentary）',
-    short: '理性的評論者，感性的敘事者。',
+    short: '有溫度的撰稿者',
     badge: 'Writing',
     color: 'amber',
     details: [
-      '承接經濟政策分析、社會觀察與文學評論邀稿。',
+      '承接經濟政策分析、社會觀察與新聞雜誌邀稿。',
       '具備數段研究助理經驗，曾參與台電計畫並撰寫專業產經能源報告。',
       '擅長將硬核的經濟邏輯與數據，轉化為易於理解且具深度的文字。',
     ],
@@ -137,7 +137,7 @@ export default function ServicePage() {
               <Instagram className="w-5 h-5" />
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/in/pj-hsieh/"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full border border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-400 transition"

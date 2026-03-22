@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 /**
- * 從站內連結開啟 /promote#xxx 時，確保捲動到對應區塊（Next App Router 有時不會自動處理）。
+ * 從站內連結開啟 /promote#xxx 時，在捲動容器內捲到錨點。
  */
-export default function PromoteHashScroll() {
+export default function PromoteHashScroll({ scrollRoot }) {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function PromoteHashScroll() {
     run();
     const t = window.setTimeout(run, 100);
     return () => window.clearTimeout(t);
-  }, [pathname]);
+  }, [pathname, scrollRoot]);
 
   return null;
 }

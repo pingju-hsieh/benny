@@ -1,13 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Instagram, Mail, Github } from 'lucide-react';
+import { getAllPosts } from '../../lib/posts';
 
 export const metadata = {
   title: 'Links',
   description: '斑泥 Bānní 的導流頁面：文字日常、遊記攝影、經濟討論與合作諮詢入口。',
 };
 
-export default function LinksPage() {
+export default async function LinksPage() {
+  const posts = await getAllPosts();
+  const latestPost = posts[0] ?? null;
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center py-10 px-4">
       <div className="w-full max-w-md mx-auto">
@@ -28,6 +32,18 @@ export default function LinksPage() {
 
         {/* Main link buttons */}
         <div className="space-y-3">
+          {latestPost ? (
+            <Link
+              href={`/posts/${latestPost.slug}`}
+              className="block w-full rounded-full border border-dashed border-amber-600/70 bg-amber-50/80 px-5 py-3 text-sm font-medium text-center text-amber-900 transition hover:border-amber-700 hover:bg-amber-100"
+            >
+              <span className="block text-[10px] font-semibold uppercase tracking-wider text-amber-700/80">
+                最新文章
+              </span>
+              <span className="mt-1 block line-clamp-2 leading-snug">{latestPost.title}</span>
+            </Link>
+          ) : null}
+
           <Link
             href="/salon"
             className="block w-full rounded-full border border-amber-700 text-amber-800 bg-white px-5 py-3 text-sm font-medium text-center hover:bg-amber-700 hover:text-white transition"
@@ -57,8 +73,14 @@ export default function LinksPage() {
           </Link>
         </div>
 
-        {/* Support button */}
-        <div className="mt-5">
+        {/* 漫步推薦 + 贊助 */}
+        <div className="mt-5 space-y-3">
+          <Link
+            href="/promote"
+            className="block w-full rounded-full border border-amber-700 text-amber-800 bg-white px-5 py-3 text-sm font-medium text-center hover:bg-amber-700 hover:text-white transition"
+          >
+            🛒 漫步推薦
+          </Link>
           <a
             href="https://www.buymeacoffee.com/banni.walks"
             target="_blank"
