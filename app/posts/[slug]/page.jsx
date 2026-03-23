@@ -1,11 +1,15 @@
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { User } from 'lucide-react';
-import { getAllPosts, getPostBySlug } from '../../../lib/posts';
+import { getAllPosts, getPostsByCollection, getPostBySlug } from '../../../lib/posts';
 import { parseMarkdownForCategory } from '../../../lib/markdownRenderers';
 import MarkdownInteractive from '../../../components/MarkdownInteractive';
 import VerticalScrollGallery from '../../../components/VerticalScrollGallery';
 import PoetryPostContent from '../../../components/PoetryPostContent';
 import PostFooterCTA from '../../../components/PostFooterCTA';
+
+const SITE_NAME = '斑泥 Bānní';
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://banni-walks.com').replace(/\/$/, '');
 
 const COLLECTION_STYLES = {
   Life: {
@@ -31,6 +35,20 @@ function getCollectionStyle(collection) {
   );
 }
 
+function toAbsoluteUrl(input) {
+  if (!input) return undefined;
+  const url = String(input);
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith('/')) return `${SITE_URL}${url}`;
+  return `${SITE_URL}/${url}`;
+}
+
+function toIsoDate(value) {
+  if (!value) return undefined;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+}
+
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((p) => ({ slug: p.slug }));
@@ -40,9 +58,13 @@ export async function generateMetadata({ params }) {
   const post = await getPostBySlug(params.slug);
   if (!post) return { title: '找不到文章' };
 
-  const title = post.title || '文章';
-  const description = post.info || post.excerpt || '';
+  const baseTitle = post.title || '文章';
+  const section = getCollectionStyle(post.collection).label;
+  const title = `${baseTitle}｜${section}｜${SITE_NAME}`;
+  const description = post.info || post.excerpt || `${baseTitle}｜${section}`;
   const urlPath = `/posts/${post.slug}`;
+  const publishedTime = toIsoDate(post.dateISO ?? post.date);
+  const ogImage = toAbsoluteUrl(post.thumbnail);
 
   return {
     title,
@@ -53,13 +75,21 @@ export async function generateMetadata({ params }) {
       description,
       url: urlPath,
       type: 'article',
-      images: post.thumbnail ? [{ url: post.thumbnail }] : undefined,
+      images: ogImage ? [{ url: ogImage }] : undefined,
+      publishedTime,
+      authors: [post.author || SITE_NAME],
+      section,
+      tags: post.tags && post.tags.length > 0 ? post.tags : undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: post.thumbnail ? [post.thumbnail] : undefined,
+      images: ogImage ? [ogImage] : undefined,
+    },
+    robots: {
+      index: true,
+      follow: true,
     },
   };
 }
@@ -73,6 +103,13 @@ export default async function PostPage({ params }) {
   const post = await getPostBySlug(params.slug);
   if (!post) notFound();
 
+  const relatedPosts =
+    post.collection && typeof post.collection === 'string'
+      ? (await getPostsByCollection(post.collection))
+          .filter((p) => p.slug !== post.slug)
+          .slice(0, 3)
+      : [];
+
   const category = post.category ? String(post.category).trim() : '';
   const isGalleryLayout = hasTag(post, '攝影') || category === '攝影集';
   const isPoetryLayout = hasTag(post, '詩文') || category === '新詩';
@@ -83,17 +120,91 @@ export default async function PostPage({ params }) {
     layoutType
   );
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title || '文章',
+    description: post.info || post.excerpt || undefined,
+    datePublished: toIsoDate(post.dateISO ?? post.date),
+    dateModified: toIsoDate(post.dateISO ?? post.date),
+    author: {
+      '@type': 'Person',
+      name: post.author || SITE_NAME,
+    },
+    mainEntityOfPage: `${SITE_URL}/posts/${post.slug}`,
+    image: toAbsoluteUrl(post.thumbnail) || undefined,
+    articleSection: getCollectionStyle(post.collection).label,
+  };
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '首頁',
+        item: `${SITE_URL}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '所有文章',
+        item: `${SITE_URL}/blog`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title || '文章',
+        item: `${SITE_URL}/posts/${post.slug}`,
+      },
+    ],
+  };
+  const jsonLdPayload = JSON.stringify([articleJsonLd, breadcrumbJsonLd]);
+
   // 攝影集模式：tag 含「攝影」或 category 攝影集
   if (isGalleryLayout && blocks) {
     return (
       <div className="w-full overflow-x-hidden">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdPayload }}
+        />
         <VerticalScrollGallery
           blocks={blocks}
           title={post.title || ''}
           info={post.info || ''}
         />
         <div className="max-w-7xl mx-auto px-4 md:px-12 py-12">
-          <PostFooterCTA collection={post.collection} />
+          {relatedPosts.length > 0 ? (
+            <section className="mt-12">
+              <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">
+                想看更多
+              </h2>
+              <div className="space-y-3">
+                {relatedPosts.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/posts/${p.slug}`}
+                    className="block rounded-xl border border-amber-100/90 bg-white/80 p-4 shadow-sm hover:bg-white transition"
+                  >
+                    <div className="text-sm text-gray-500 mb-1">
+                      {p.dateDisplay || p.dateISO || p.date}
+                    </div>
+                    <div className="font-serif text-lg font-semibold text-gray-900">{p.title}</div>
+                    {p.excerpt ? (
+                      <div className="text-sm text-gray-600 mt-1 line-clamp-2 whitespace-pre-line">
+                        {p.excerpt}
+                      </div>
+                    ) : null}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <div className="mt-10">
+            <PostFooterCTA collection={post.collection} />
+          </div>
         </div>
       </div>
     );
@@ -103,13 +214,47 @@ export default async function PostPage({ params }) {
   if (isGalleryLayout) {
     return (
       <div className="max-w-3xl mx-auto py-16 px-4">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdPayload }}
+        />
         <header className="mb-10">
           <h1 className="text-3xl font-serif font-bold mb-4">{post.title}</h1>
           {post.info ? <p className="text-lg text-gray-600">{post.info}</p> : null}
         </header>
         <article className="bg-white rounded-2xl shadow p-8 sm:p-10">
           <MarkdownInteractive html={html} />
-          <PostFooterCTA collection={post.collection} />
+
+          {relatedPosts.length > 0 ? (
+            <section className="mt-10">
+              <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">
+                想看更多
+              </h2>
+              <div className="space-y-3">
+                {relatedPosts.map((p) => (
+                  <Link
+                    key={p.slug}
+                    href={`/posts/${p.slug}`}
+                    className="block rounded-xl border border-amber-100/90 bg-white/80 p-4 shadow-sm hover:bg-white transition"
+                  >
+                    <div className="text-sm text-gray-500 mb-1">
+                      {p.dateDisplay || p.dateISO || p.date}
+                    </div>
+                    <div className="font-serif text-lg font-semibold text-gray-900">{p.title}</div>
+                    {p.excerpt ? (
+                      <div className="text-sm text-gray-600 mt-1 line-clamp-2 whitespace-pre-line">
+                        {p.excerpt}
+                      </div>
+                    ) : null}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <div className="mt-8">
+            <PostFooterCTA collection={post.collection} />
+          </div>
         </article>
       </div>
     );
@@ -120,6 +265,10 @@ export default async function PostPage({ params }) {
     const collStyle = post.collection ? getCollectionStyle(post.collection) : null;
     return (
       <div className="max-w-2xl mx-auto py-16 px-4 poetry-sheet-wrapper">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdPayload }}
+        />
         <header className="mb-8">
           {post.category ? (
             <p
@@ -136,7 +285,35 @@ export default async function PostPage({ params }) {
           title={post.title || ''}
           date={post.date || post.dateDisplay}
         />
-        <div className="mt-8">
+
+        {relatedPosts.length > 0 ? (
+          <section className="mt-12">
+            <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">
+              想看更多
+            </h2>
+            <div className="space-y-3">
+              {relatedPosts.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={`/posts/${p.slug}`}
+                  className="block rounded-xl border border-amber-100/90 bg-white/80 p-4 shadow-sm hover:bg-white transition"
+                >
+                  <div className="text-sm text-gray-500 mb-1">
+                    {p.dateDisplay || p.dateISO || p.date}
+                  </div>
+                  <div className="font-serif text-lg font-semibold text-gray-900">{p.title}</div>
+                  {p.excerpt ? (
+                    <div className="text-sm text-gray-600 mt-1 line-clamp-2 whitespace-pre-line">
+                      {p.excerpt}
+                    </div>
+                  ) : null}
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <div className="mt-10">
           <PostFooterCTA collection={post.collection} />
         </div>
       </div>
@@ -147,6 +324,10 @@ export default async function PostPage({ params }) {
   const collStyle = post.collection ? getCollectionStyle(post.collection) : null;
   return (
     <div className="max-w-3xl mx-auto py-16 px-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdPayload }}
+      />
       <header className="mb-10">
         {post.category || post.series ? (
           <div className="mb-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
@@ -191,8 +372,36 @@ export default async function PostPage({ params }) {
 
       <article className="bg-white rounded-2xl shadow p-8 sm:p-10">
         <MarkdownInteractive html={html} />
+        {relatedPosts.length > 0 ? (
+          <section className="mt-10">
+            <h2 className="text-xl font-serif font-semibold text-gray-900 mb-4">
+              想看更多
+            </h2>
+            <div className="space-y-3">
+              {relatedPosts.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={`/posts/${p.slug}`}
+                  className="block rounded-xl border border-amber-100/90 bg-white/80 p-4 shadow-sm hover:bg-white transition"
+                >
+                  <div className="text-sm text-gray-500 mb-1">
+                    {p.dateDisplay || p.dateISO || p.date}
+                  </div>
+                  <div className="font-serif text-lg font-semibold text-gray-900">{p.title}</div>
+                  {p.excerpt ? (
+                    <div className="text-sm text-gray-600 mt-1 line-clamp-2 whitespace-pre-line">
+                      {p.excerpt}
+                    </div>
+                  ) : null}
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
-        <PostFooterCTA collection={post.collection} />
+        <div className="mt-8">
+          <PostFooterCTA collection={post.collection} />
+        </div>
       </article>
     </div>
   );

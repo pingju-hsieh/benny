@@ -21,6 +21,9 @@ export const metadata = {
   },
   alternates: {
     canonical: '/',
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
   },
   robots: {
     index: true,
