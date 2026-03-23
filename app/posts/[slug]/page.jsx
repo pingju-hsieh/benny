@@ -60,7 +60,7 @@ export async function generateMetadata({ params }) {
 
   const baseTitle = post.title || '文章';
   const section = getCollectionStyle(post.collection).label;
-  const title = `${baseTitle}｜${section}｜${SITE_NAME}`;
+  const title = baseTitle;
   const description = post.info || post.excerpt || `${baseTitle}｜${section}`;
   const urlPath = `/posts/${post.slug}`;
   const publishedTime = toIsoDate(post.dateISO ?? post.date);
