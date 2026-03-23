@@ -30,14 +30,33 @@ const ParticlesCanvas = ({ canvasRef }) => {
 
     const drawTextMask = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const base = isMobile ? 0.85 : 1.2;
       const textLogicalWidth = canvas.width / dpr;
-      const fontSize = Math.min(textLogicalWidth / (PEN_NAME.length * base), isMobile ? 110 : 220);
+      const textLogicalHeight = canvas.height / dpr;
+
+      // 先用舊邏輯估一個字級，再用 measureText 校正「中文字寬」誤差。
+      // 若不校正，手機版常會因寬度估算偏大而「吃出容器寬度一點點」。
+      const base = isMobile ? 0.85 : 1.2;
+      const maxFontSize = isMobile ? 110 : 220;
+      const initialFontSize = Math.min(
+        textLogicalWidth / (PEN_NAME.length * base),
+        maxFontSize
+      );
+
+      ctx.font = `800 ${initialFontSize}px 'Noto Serif TC', serif`;
+      const measuredWidth = ctx.measureText(PEN_NAME).width || 0;
+
+      // 預留左右邊距（讓文字 mask 永遠落在安全範圍內）
+      const targetWidth = textLogicalWidth * (isMobile ? 0.92 : 0.96);
+      const adjustedFontSize =
+        measuredWidth > 0 ? initialFontSize * (targetWidth / measuredWidth) : initialFontSize;
+
+      const fontSize = Math.min(adjustedFontSize, maxFontSize);
+
       ctx.font = `800 ${fontSize}px 'Noto Serif TC', serif`;
       ctx.fillStyle = "#000";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(PEN_NAME, (canvas.width / dpr) / 2, (canvas.height / dpr) / 3);
+      ctx.fillText(PEN_NAME, textLogicalWidth / 2, textLogicalHeight / 3);
 
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
       const points = [];

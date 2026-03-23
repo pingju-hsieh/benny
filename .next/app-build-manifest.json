@@ -6,10 +6,20 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/promote/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/promote/page.js"
+    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
+    ],
+    "/api/latest-works/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/latest-works/route.js"
     ],
     "/discussion/page": [
       "static/chunks/webpack.js",
@@ -26,25 +36,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/posts/[slug]/page.js"
     ],
-    "/travel/page": [
+    "/content/[...path]/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/travel/page.js"
-    ],
-    "/service/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/service/page.js"
-    ],
-    "/salon/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/salon/page.js"
-    ],
-    "/api/latest-works/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/latest-works/route.js"
+      "static/chunks/app/content/[...path]/route.js"
     ]
   }
 }

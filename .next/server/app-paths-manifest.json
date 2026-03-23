@@ -1,7 +1,8 @@
 {
+  "/api/latest-works/route": "app/api/latest-works/route.js",
+  "/content/[...path]/route": "app/content/[...path]/route.js",
+  "/promote/page": "app/promote/page.js",
   "/page": "app/page.js",
   "/discussion/page": "app/discussion/page.js",
-  "/posts/[slug]/page": "app/posts/[slug]/page.js",
-  "/service/page": "app/service/page.js",
-  "/salon/page": "app/salon/page.js"
+  "/posts/[slug]/page": "app/posts/[slug]/page.js"
 }

@@ -24,7 +24,7 @@ export default function AdBanner({ onInternalNavigate }) {
         </div>
       </div>
       <Link
-        href="/promote#read"
+        href="/promote"
         className="mt-3 flex w-full items-center justify-center rounded-full bg-amber-700 px-4 py-2 text-xs font-medium text-white shadow-sm transition hover:bg-amber-800"
         onClick={() => onInternalNavigate?.()}
       >

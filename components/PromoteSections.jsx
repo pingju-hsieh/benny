@@ -51,7 +51,7 @@ export default function PromoteSections() {
                       </div>
                     ) : (
                       <p className="mt-4 inline-flex w-fit items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800/90">
-                        即將更新
+                        {item.placeholder ? '搜集中' : '即將更新'}
                       </p>
                     )}
                   </li>
@@ -61,13 +61,6 @@ export default function PromoteSections() {
           );
         })}
       </div>
-
-      <footer className="mt-14 rounded-2xl border border-gray-200 bg-gray-50/80 px-5 py-4 text-xs leading-relaxed text-gray-600">
-        <p className="font-medium text-gray-700">關於合作連結</p>
-        <p className="mt-2">
-          我會盡量只放自己用過、願意負責推薦的項目；若連結失效或你的使用經驗與我不同，歡迎告訴我。此頁內容會不定期修訂。
-        </p>
-      </footer>
     </>
   );
 }

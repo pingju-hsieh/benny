@@ -14,10 +14,25 @@ export default function PromoteHashScroll({ scrollRoot }) {
 
     const run = () => {
       const raw = typeof window !== 'undefined' ? window.location.hash : '';
-      const id = raw?.replace(/^#/, '');
+      // 容錯：避免出現 `##travel` 造成 id 變成 `#travel`
+      const id = raw?.replace(/^#+/, '');
       if (!id) return;
       const el = document.getElementById(id);
-      if (el) {
+      if (!el) return;
+
+      // 與 toc click 相同：只捲動清單容器，避免整頁跳動到最底。
+      const root =
+        scrollRoot ||
+        (typeof document !== 'undefined'
+          ? document.querySelector('div[aria-label="推薦清單"]')
+          : null);
+
+      if (root) {
+        const rootRect = root.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+        const deltaTop = elRect.top - rootRect.top;
+        root.scrollTo({ top: root.scrollTop + deltaTop, behavior: 'smooth' });
+      } else {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     };

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { BookOpen, Camera, Lamp, Home, User, Heart, Menu, X, Briefcase } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AdBanner from './AdBanner';
 
 const PEN_NAME = '斑泥走走';
@@ -45,25 +45,14 @@ export default function SiteLayout({ children }) {
 
   const isPromotePage = pathname === '/promote';
 
-  /** 漫步推薦：鎖定整頁捲動，只讓清單欄內部捲動 */
-  useEffect(() => {
-    if (!isPromotePage) return undefined;
-    const html = document.documentElement;
-    const prevBody = document.body.style.overflow;
-    const prevHtml = html.style.overflow;
-    document.body.style.overflow = 'hidden';
-    html.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prevBody;
-      html.style.overflow = prevHtml;
-    };
-  }, [isPromotePage]);
+  // （此處不做滾動鎖；/promote 只透過自身清單容器的 overflow-y-auto 控制捲動）
 
   return (
     <div
       className={
-        isPromotePage
-          ? 'flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden'
+        // 讓 /promote 外層版面結構與其他頁一致（header/footer 都照常顯示）
+        pathname === '/promote'
+          ? 'flex h-[100svh] max-h-[100svh] flex-col overflow-hidden'
           : 'flex min-h-screen flex-col'
       }
     >
@@ -200,14 +189,18 @@ export default function SiteLayout({ children }) {
         <Home className="h-6 w-6 shrink-0" strokeWidth={2} aria-hidden />
       </button>
 
-      <footer className="mt-auto w-full shrink-0 border-t border-gray-200 bg-white py-8">
-        <div className="max-w-7xl mx-auto text-center text-sm text-gray-500 px-4">
-          <p>
-            © {new Date().getFullYear()} {PEN_NAME} | 個人創作 | 版權所有
-          </p>
-          <p className="mt-2">“你若愛上世界的美，那美就是神的呼喚 - Thomas Merton”</p>
-        </div>
-      </footer>
+      {pathname === '/promote' ? null : (
+        <footer className="mt-auto w-full shrink-0 border-t border-gray-200 bg-white py-8">
+          <div className="max-w-7xl mx-auto text-center text-sm text-gray-500 px-4">
+            <p>
+              © {new Date().getFullYear()} {PEN_NAME} | 個人創作 | 版權所有
+            </p>
+            <p className="mt-2">
+              “你若愛上世界的美，那美就是神的呼喚 - Thomas Merton”
+            </p>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

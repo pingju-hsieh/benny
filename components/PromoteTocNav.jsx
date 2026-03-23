@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * 漫步推薦：分類目錄（固定不捲動；捲動發生在 scrollRoot 內時，Observer 以 root 對齊）。
@@ -8,10 +8,37 @@ import { useEffect, useState } from 'react';
 export default function PromoteTocNav({ entries, scrollRoot }) {
   const [activeId, setActiveId] = useState(entries[0]?.id ?? '');
 
+  const resolveScrollRoot = useCallback(() => {
+    if (scrollRoot) return scrollRoot;
+    if (typeof document === 'undefined') return null;
+    return document.querySelector('div[aria-label="推薦清單"]');
+  }, [scrollRoot]);
+
+  const scrollTo = (id) => {
+    const normalizedId = String(id ?? '').replace(/^#+/, '');
+    const el = document.getElementById(normalizedId);
+    if (!el) return;
+
+    const root = resolveScrollRoot();
+    if (root) {
+      const rootRect = root.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const deltaTop = elRect.top - rootRect.top;
+      root.scrollTo({ top: root.scrollTop + deltaTop, behavior: 'smooth' });
+    } else {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    try {
+      history.replaceState(null, '', `#${normalizedId}`);
+    } catch {
+      /* ignore */
+    }
+  };
+
   useEffect(() => {
     const ids = entries.map((e) => e.id);
     const els = ids.map((id) => document.getElementById(id)).filter(Boolean);
-
     if (els.length === 0) return undefined;
 
     const observer = new IntersectionObserver(
@@ -19,33 +46,18 @@ export default function PromoteTocNav({ entries, scrollRoot }) {
         const visible = list
           .filter((e) => e.isIntersecting && e.target.id)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target?.id) {
-          setActiveId(visible[0].target.id);
-        }
+        if (visible[0]?.target?.id) setActiveId(visible[0].target.id);
       },
       {
-        root: scrollRoot ?? null,
+        root: resolveScrollRoot(),
         rootMargin: '-8% 0px -45% 0px',
         threshold: [0, 0.1, 0.25, 0.5],
       }
     );
 
     els.forEach((el) => observer.observe(el));
-
     return () => observer.disconnect();
-  }, [entries, scrollRoot]);
-
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      try {
-        history.replaceState(null, '', `#${id}`);
-      } catch {
-        /* ignore */
-      }
-    }
-  };
+  }, [entries, scrollRoot, resolveScrollRoot]);
 
   const linkClass = (id) =>
     `shrink-0 rounded-full px-3.5 py-1.5 text-xs font-medium transition sm:text-sm ${

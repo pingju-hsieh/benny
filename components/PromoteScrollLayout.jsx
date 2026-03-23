@@ -20,21 +20,6 @@ export default function PromoteScrollLayout({ tocEntries, children }) {
       <PromoteHashScroll scrollRoot={scrollRoot} />
 
       <div className="mx-auto flex w-full max-w-6xl min-h-0 flex-1 flex-col overflow-hidden">
-        {/* 固定：標題 + 說明 */}
-        <header className="mx-auto mb-4 max-w-3xl shrink-0 text-center lg:mb-6">
-          <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-amber-700/90">
-            Affiliate & picks
-          </p>
-          <h1 className="font-serif text-3xl font-bold tracking-wide text-amber-950 sm:text-4xl">
-            漫步推薦
-          </h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-gray-600 sm:mt-4">
-            這裡是我整理過的旅宿、讀物與常用服務。標示為合作連結的項目，若你點擊並完成消費，我會收到平台給創作者的回饋——
-            <strong className="font-medium text-gray-700">你支付的價格不會因此變貴</strong>
-            ，但能支持我繼續寫作、拍照與維護網站。
-          </p>
-        </header>
-
         {/* 下方：目錄（固定）+ 僅清單捲動 */}
         <div className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row lg:gap-10 xl:gap-14">
           <PromoteTocNav entries={tocEntries} scrollRoot={scrollRoot} />
@@ -45,6 +30,20 @@ export default function PromoteScrollLayout({ tocEntries, children }) {
             tabIndex={0}
             aria-label="推薦清單"
           >
+            <header className="mx-auto mb-6 max-w-3xl shrink-0 text-center lg:mb-6">
+              <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-amber-700/90">
+                Affiliate & picks
+              </p>
+              <h1 className="font-serif text-3xl font-bold tracking-wide text-amber-950 sm:text-4xl">
+                漫步推薦
+              </h1>
+            </header>
+
+            <p className="mx-auto mb-6 max-w-xl px-1 text-center text-sm leading-relaxed text-gray-600 sm:mb-8">
+              這裡是我整理過的旅宿、讀物與常用服務。標示為合作連結的項目，若你點擊並完成消費，
+              我會收到平台給創作者的回饋——
+              <strong className="font-medium text-gray-700">你支付的價格不會因此變貴</strong>，但能支持我繼續寫作、拍照與維護網站。
+            </p>
             {children}
           </div>
         </div>
