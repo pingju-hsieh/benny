@@ -1,4 +1,4 @@
-// File: /Users/bingruxie/benny walk/app/salon/page.jsx
+// File: /Users/bingruxie/banni walk/app/salon/page.jsx
 import * as entry from '../../../../app/salon/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

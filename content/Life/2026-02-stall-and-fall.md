@@ -1,5 +1,5 @@
 ---
-title: 失速墜落 v.1
+title: 失速墜落
 date: 2026-02-28
 category: 新詩
 thumbnail: _DSF0966.jpg

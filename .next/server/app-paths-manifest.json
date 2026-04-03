@@ -1,7 +1,5 @@
 {
-  "/content/[...path]/route": "app/content/[...path]/route.js",
+  "/salon/page": "app/salon/page.js",
   "/discussion/page": "app/discussion/page.js",
-  "/posts/[slug]/page": "app/posts/[slug]/page.js",
-  "/travel/page": "app/travel/page.js",
-  "/salon/page": "app/salon/page.js"
+  "/posts/[slug]/page": "app/posts/[slug]/page.js"
 }

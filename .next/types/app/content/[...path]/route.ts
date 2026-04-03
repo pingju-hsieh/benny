@@ -1,4 +1,4 @@
-// File: /Users/bingruxie/benny walk/app/content/[...path]/route.js
+// File: /Users/bingruxie/banni walk/app/content/[...path]/route.js
 import * as entry from '../../../../../app/content/[...path]/route.js'
 import type { NextRequest } from 'next/server.js'
 
