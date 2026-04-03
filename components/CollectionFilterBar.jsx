@@ -1,12 +1,21 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Filter } from 'lucide-react';
 
-export default function CollectionFilterBar({ posts, onFilterChange }) {
+export default function CollectionFilterBar({ posts, filters, onFilterChange }) {
+  const searchParams = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('全部');
-  const [activeSeries, setActiveSeries] = useState('全部');
+
+  const activeCategory = filters?.category ?? '全部';
+  const activeSeries = filters?.series ?? '全部';
+
+  useEffect(() => {
+    const c = searchParams.get('category');
+    const s = searchParams.get('series');
+    if (c || s) setShowFilters(true);
+  }, [searchParams]);
 
   const categories = useMemo(() => {
     const set = new Set();
@@ -47,7 +56,6 @@ export default function CollectionFilterBar({ posts, onFilterChange }) {
 
       {showFilters && (
         <div className="space-y-3">
-          {/* Category */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => {
               const isActive = cat === activeCategory;
@@ -55,10 +63,7 @@ export default function CollectionFilterBar({ posts, onFilterChange }) {
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => {
-                    setActiveCategory(cat);
-                    handleChange(cat, activeSeries);
-                  }}
+                  onClick={() => handleChange(cat, activeSeries)}
                   className={`px-3 py-1 rounded-full text-xs font-medium border transition ${
                     isActive
                       ? 'bg-amber-600 text-white border-amber-600'
@@ -71,7 +76,6 @@ export default function CollectionFilterBar({ posts, onFilterChange }) {
             })}
           </div>
 
-          {/* Series */}
           {seriesList.length > 1 && (
             <div className="flex flex-wrap gap-2">
               {seriesList.map((s) => {
@@ -80,10 +84,7 @@ export default function CollectionFilterBar({ posts, onFilterChange }) {
                   <button
                     key={s}
                     type="button"
-                    onClick={() => {
-                      setActiveSeries(s);
-                      handleChange(activeCategory, s);
-                    }}
+                    onClick={() => handleChange(activeCategory, s)}
                     className={`px-3 py-1 rounded-full text-[11px] font-medium border transition ${
                       isActive
                         ? 'bg-amber-700 text-white border-amber-700'
@@ -101,4 +102,3 @@ export default function CollectionFilterBar({ posts, onFilterChange }) {
     </div>
   );
 }
-

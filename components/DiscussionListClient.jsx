@@ -1,12 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import CollectionFilterBar from './CollectionFilterBar';
+import { usePostListFiltersFromUrl } from '../hooks/usePostListFiltersFromUrl';
 
 export default function DiscussionListClient({ posts }) {
-  const [filters, setFilters] = useState({ category: '全部', series: '全部' });
+  const [filters, setFilters] = usePostListFiltersFromUrl(posts);
 
   const filtered = useMemo(
     () =>
@@ -20,7 +21,7 @@ export default function DiscussionListClient({ posts }) {
 
   return (
     <>
-      <CollectionFilterBar posts={posts} onFilterChange={setFilters} />
+      <CollectionFilterBar posts={posts} filters={filters} onFilterChange={setFilters} />
 
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl shadow p-8 text-center text-gray-600">目前沒有符合條件的文章。</div>

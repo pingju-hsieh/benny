@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { BookOpen } from 'lucide-react';
 import { getPostsByCollection } from '../../lib/posts';
 import SalonListClient from '../../components/SalonListClient';
@@ -21,7 +22,15 @@ export default async function SalonPage() {
         {posts.length === 0 ? (
           <div className="bg-white rounded-xl shadow p-8 text-center text-gray-600">目前還沒有文章。</div>
         ) : (
-          <SalonListClient posts={posts} />
+          <Suspense
+            fallback={
+              <div className="bg-white rounded-xl shadow p-8 text-center text-gray-500 text-sm">
+                載入列表…
+              </div>
+            }
+          >
+            <SalonListClient posts={posts} />
+          </Suspense>
         )}
       </div>
     </div>

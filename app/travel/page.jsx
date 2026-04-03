@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Camera } from 'lucide-react';
 import { getPostsByCollection } from '../../lib/posts';
 import TravelListClient from '../../components/TravelListClient';
@@ -23,7 +24,15 @@ export default async function TravelPage() {
             目前還沒有遊記攝影文章。請新增到 `content/Travel/`。
           </div>
         ) : (
-          <TravelListClient posts={posts} />
+          <Suspense
+            fallback={
+              <div className="bg-white rounded-2xl shadow p-10 text-center text-gray-500 text-sm">
+                載入列表…
+              </div>
+            }
+          >
+            <TravelListClient posts={posts} />
+          </Suspense>
         )}
       </div>
     </div>

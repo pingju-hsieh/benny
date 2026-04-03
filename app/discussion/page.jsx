@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Lamp } from 'lucide-react';
 import { getPostsByCollection } from '../../lib/posts';
 import DiscussionListClient from '../../components/DiscussionListClient';
@@ -34,7 +35,15 @@ export default async function DiscussionPage() {
         {posts.length === 0 ? (
           <div className="bg-white rounded-2xl shadow p-10 text-center text-gray-600">目前還沒有文章。請新增到 `content/Discussion/`。</div>
         ) : (
-          <DiscussionListClient posts={posts} />
+          <Suspense
+            fallback={
+              <div className="bg-white rounded-2xl shadow p-10 text-center text-gray-500 text-sm">
+                載入列表…
+              </div>
+            }
+          >
+            <DiscussionListClient posts={posts} />
+          </Suspense>
         )}
       </div>
     </div>

@@ -1,8 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Filter } from 'lucide-react';
+import { usePostListFiltersFromUrl } from '../hooks/usePostListFiltersFromUrl';
 
 const COLLECTION_STYLES = {
   Life: {
@@ -29,10 +31,14 @@ function getCollectionStyle(collection) {
 }
 
 export default function BlogIndexClient({ posts }) {
-  const [activeTag, setActiveTag] = useState('全部');
-  const [activeSeries, setActiveSeries] = useState('全部');
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = usePostListFiltersFromUrl(posts);
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('category') || searchParams.get('series')) setShowFilters(true);
+  }, [searchParams]);
 
   const tags = useMemo(() => {
     const set = new Set();
@@ -52,8 +58,8 @@ export default function BlogIndexClient({ posts }) {
 
   const filtered = useMemo(() => {
     return posts.filter((p) => {
-      if (activeTag !== '全部' && p.category !== activeTag) return false;
-      if (activeSeries !== '全部' && p.series !== activeSeries) return false;
+      if (filters.category !== '全部' && p.category !== filters.category) return false;
+      if (filters.series !== '全部' && p.series !== filters.series) return false;
       if (!query.trim()) return true;
       const q = query.trim().toLowerCase();
       const haystack = [
@@ -69,13 +75,12 @@ export default function BlogIndexClient({ posts }) {
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [activeTag, activeSeries, query, posts]);
+  }, [filters.category, filters.series, query, posts]);
 
   return (
     <div className="max-w-4xl mx-auto py-16 px-4">
       <h1 className="text-4xl font-serif text-center mb-6 border-b pb-4">所有文章</h1>
 
-      {/* 搜尋列 + 篩選切換 */}
       <div className="mb-4 flex items-center gap-3">
         <div className="flex-1">
           <input
@@ -102,15 +107,14 @@ export default function BlogIndexClient({ posts }) {
 
       {showFilters && (
         <div className="mb-8 space-y-3">
-          {/* Tag 篩選列（category） */}
           <div className="flex flex-wrap gap-2 justify-center">
             {tags.map((tag) => {
-              const isActive = tag === activeTag;
+              const isActive = tag === filters.category;
               return (
                 <button
                   key={tag}
                   type="button"
-                  onClick={() => setActiveTag(tag)}
+                  onClick={() => setFilters((prev) => ({ ...prev, category: tag }))}
                   className={`px-3 py-1 rounded-full text-xs font-medium border transition ${
                     isActive
                       ? 'bg-amber-600 text-white border-amber-600'
@@ -123,16 +127,15 @@ export default function BlogIndexClient({ posts }) {
             })}
           </div>
 
-          {/* Series 篩選列 */}
           {seriesList.length > 1 && (
             <div className="flex flex-wrap gap-2 justify-center">
               {seriesList.map((s) => {
-                const isActive = s === activeSeries;
+                const isActive = s === filters.series;
                 return (
                   <button
                     key={s}
                     type="button"
-                    onClick={() => setActiveSeries(s)}
+                    onClick={() => setFilters((prev) => ({ ...prev, series: s }))}
                     className={`px-3 py-1 rounded-full text-[11px] font-medium border transition ${
                       isActive
                         ? 'bg-amber-700 text-white border-amber-700'
@@ -195,4 +198,3 @@ export default function BlogIndexClient({ posts }) {
     </div>
   );
 }
-

@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { User } from 'lucide-react';
 import { getAllPosts, getPostsByCollection, getPostBySlug } from '../../../lib/posts';
+import { buildPostListFilterHref } from '../../../lib/postListRoutes';
 import { parseMarkdownForCategory } from '../../../lib/markdownRenderers';
 import MarkdownInteractive from '../../../components/MarkdownInteractive';
 import VerticalScrollGallery from '../../../components/VerticalScrollGallery';
@@ -32,6 +33,35 @@ function getCollectionStyle(collection) {
       label: collection || '其他',
       categoryTextClass: 'text-gray-600',
     }
+  );
+}
+
+const postMetaLinkFocus =
+  'rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2';
+
+function PostCategorySeriesLinks({ collection, category, series, categoryClassName }) {
+  const cat = category ? String(category).trim() : '';
+  const ser = series ? String(series).trim() : '';
+  if (!cat && !ser) return null;
+  return (
+    <div className="mb-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+      {cat ? (
+        <Link
+          href={buildPostListFilterHref(collection, { category: cat })}
+          className={`text-xs font-semibold sm:text-sm hover:underline ${categoryClassName} ${postMetaLinkFocus}`}
+        >
+          {cat}
+        </Link>
+      ) : null}
+      {ser ? (
+        <Link
+          href={buildPostListFilterHref(collection, { series: ser })}
+          className={`text-xs font-serif font-bold tracking-wide text-amber-700 sm:text-sm hover:underline ${postMetaLinkFocus}`}
+        >
+          {ser}
+        </Link>
+      ) : null}
+    </div>
   );
 }
 
@@ -271,13 +301,16 @@ export default async function PostPage({ params }) {
         />
         <header className="mb-8">
           {post.category ? (
-            <p
-              className={`text-xs font-semibold sm:text-sm ${
+            <Link
+              href={buildPostListFilterHref(post.collection, {
+                category: String(post.category).trim(),
+              })}
+              className={`inline-block text-xs font-semibold sm:text-sm hover:underline ${
                 collStyle ? collStyle.categoryTextClass : 'text-amber-800'
-              }`}
+              } ${postMetaLinkFocus}`}
             >
               {post.category}
-            </p>
+            </Link>
           ) : null}
         </header>
         <PoetryPostContent
@@ -329,24 +362,12 @@ export default async function PostPage({ params }) {
         dangerouslySetInnerHTML={{ __html: jsonLdPayload }}
       />
       <header className="mb-10">
-        {post.category || post.series ? (
-          <div className="mb-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-            {post.category ? (
-              <span
-                className={`text-xs font-semibold sm:text-sm ${
-                  collStyle ? collStyle.categoryTextClass : 'text-gray-600'
-                }`}
-              >
-                {post.category}
-              </span>
-            ) : null}
-            {post.series ? (
-              <span className="text-xs font-serif font-bold tracking-wide text-amber-700 sm:text-sm">
-                {post.series}
-              </span>
-            ) : null}
-          </div>
-        ) : null}
+        <PostCategorySeriesLinks
+          collection={post.collection}
+          category={post.category}
+          series={post.series}
+          categoryClassName={collStyle ? collStyle.categoryTextClass : 'text-gray-600'}
+        />
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-wide leading-snug md:leading-tight mb-4 text-[#333333]">
           {post.title}
