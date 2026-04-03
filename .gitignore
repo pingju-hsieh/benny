@@ -7,12 +7,38 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Next.js（建置輸出與 webpack 快取，勿提交）
+.next
+out
+
+# 其他建置產物
 dist
 dist-ssr
-*.local
+build
 
-# Editor directories and files
+# 環境變數（勿提交金鑰；範例檔可命名 .env.example 並納入版控）
+.env*
+!.env.example
+
+# Vercel CLI 本機設定
+.vercel
+
+# Turborepo
+.turbo
+
+# 測試覆蓋率
+coverage
+.nyc_output
+
+# 工具快取
+.eslintcache
+*.tsbuildinfo
+
+# 本機／編輯器
+*.local
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,3 +48,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+Thumbs.db
+
+# 憑證
+*.pem

@@ -1,9 +1,0 @@
-{
-  "/content/[...path]/route": "app/content/[...path]/route.js",
-  "/discussion/page": "app/discussion/page.js",
-  "/salon/page": "app/salon/page.js",
-  "/posts/[slug]/page": "app/posts/[slug]/page.js",
-  "/service/page": "app/service/page.js",
-  "/travel/page": "app/travel/page.js",
-  "/blog/page": "app/blog/page.js"
-}
