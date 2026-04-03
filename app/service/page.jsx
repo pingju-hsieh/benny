@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Instagram, Linkedin, Github, ChevronDown, ChevronUp, Mail } from 'lucide-react';
+import { ChevronDown, ChevronUp, Mail } from 'lucide-react';
 
 const HERO_TITLE = '合作諮詢';
 const HERO_SUBTITLE =
@@ -12,13 +12,13 @@ const SERVICES = [
   {
     id: 'academic',
     title: '歐洲碩士留學諮詢（Academic Consulting）',
-    short: '歐陸與英國頂尖經濟碩士申請經驗。',
+    short: '歐陸與英國頂尖經管碩士申請經驗',
     badge: 'Academic',
     color: 'rose',
     details: [
-      '具備深厚的歐陸留學經驗（荷蘭鹿特丹 Erasmus 交換一年），雅思 7 分。',
+      '歐陸留學經驗（荷蘭鹿特丹 Erasmus 交換一年，法國圖盧茲經濟學院 TSE 碩士在讀），雅思 7 分。',
       '碩士Admission 包含：LSE EME、TSE MED、Sciences Po（Dual Degree）、Bocconi ESS、LMU MQE、Bonn Econ、EMJ M3EP。',
-      '可協助 EME / MED 等頂尖經濟碩士申請策略、SOP / CV 建議與歐陸商管經濟名校選校分享。',
+      '可協助 EME / MED 等頂尖經濟碩士申請策略、SOP / CV 建議與歐陸商管經濟學校選校分享。',
     ],
   },
   {
@@ -37,13 +37,13 @@ const SERVICES = [
   {
     id: 'writing',
     title: '跨領域撰文與專欄（Writing & Commentary）',
-    short: '有溫度的撰稿者',
+    short: '有溫度與深度的撰稿者',
     badge: 'Writing',
     color: 'amber',
     details: [
       '承接經濟政策分析、社會觀察與新聞雜誌邀稿。',
       '具備數段研究助理經驗，曾參與台電計畫並撰寫專業產經能源報告。',
-      '擅長將硬核的經濟邏輯與數據，轉化為易於理解且具深度的文字。',
+      '擅長將複雜的經濟邏輯與數據，轉化為易於理解且具深度的文字。',
     ],
   },
   {
@@ -53,8 +53,8 @@ const SERVICES = [
     badge: 'Travel',
     color: 'sky',
     details: [
-      '記錄超過 30 個國家的自然與人文景緻，特別偏愛歐陸小鎮與慢旅行。',
-      '提供深度旅遊心得撰寫、歐洲私房小鎮規劃建議。',
+      '記錄許多國家的自然與人文景緻，特別偏愛歐陸小鎮與慢旅行。',
+      '提供深度旅遊心得撰寫、歐洲小鎮旅遊規劃建議。',
       '可提供影像商業授權與合作專題（展覽、品牌故事影像）。',
     ],
   },
@@ -120,39 +120,6 @@ export default function ServicePage() {
           >
             {HERO_SUBTITLE}
           </motion.p>
-
-          {/* 社群連結列 */}
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className="mt-6 flex items-center justify-center gap-4"
-          >
-            <a
-              href="https://www.instagram.com/banni_walks"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-full border border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-400 transition"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/pj-hsieh/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-full border border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-400 transition"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-full border border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-400 transition"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-          </motion.div>
         </section>
 
         {/* 服務卡片 Grid */}
