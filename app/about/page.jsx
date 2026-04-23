@@ -30,17 +30,17 @@ export default function AboutPage() {
 
           <div className="text-lg space-y-4">
             <p>
-              <strong>斑泥</strong>，一個熱愛文字與旅行的靈魂，喜歡凝視風景，也嘗試把凝視寫下來。
+              一個熱愛文字與旅行的靈魂，喜歡凝視風景，也嘗試把凝視寫下。
             </p>
             <p>
-              經濟是我的職志，我願他能幫助微小的日常。詩是我安靜的呼吸。我嘗試將理性與感性、分析與感受，編織成一段段文字與影像。
+              經濟是我的職志，願它能造就平凡的日常。詩是安靜的呼吸。我嘗試將理性與感性、分析與感受，編織成一段段文字與影像。
             </p>
           </div>
         </div>
 
         <div className="mt-16 space-y-6">
           <h2 className="text-2xl sm:text-3xl font-serif font-semibold tracking-wide leading-snug">
-            我的名字
+            筆名
           </h2>
           <div className="text-lg space-y-4">
             <ul className="list-disc list-inside text-lg text-gray-700 space-y-2">
@@ -51,7 +51,7 @@ export default function AboutPage() {
                 「<strong>泥</strong>」 是我曾經害怕被看見的東西：不完整、鬆軟、不確定。但我學著用它塑形，慢慢捏出屬於自己的樣子。
               </li>
             </ul>
-            <p>如果你讀到了什麼，也許那正是我們心裡共有的碎片。我願這些碎片被你收藏，能再折射出五彩斑斕光。</p>
+            <p>如果你讀到了什麼，也許那正是我們心裡共有的碎片。我願這些碎片被你收藏，能再折射出五彩斑斕的光。</p>
           </div>
         </div>
 
