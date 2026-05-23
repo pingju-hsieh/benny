@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Instagram, Sparkles, MapPin, Lamp } from 'lucide-react';
+import { Instagram, Lamp } from 'lucide-react';
+// import { Sparkles, MapPin } from 'lucide-react'; // 漫步推薦暫時下線
 import BuyMeACoffeeImageLink from './BuyMeACoffeeImageLink';
 
 /** 三頁共用：左欄主按鈕（略淡琥珀）；無襯線、字級略大、字重加粗 */
@@ -16,9 +17,10 @@ function getConfig(collection) {
       return {
         title: '遊記攝影',
         text:
-          '若這些路線與畫面對你的旅程有幫助，歡迎到「漫步推薦」看我整理過的旅宿與行程工具；透過站內連結完成預訂，價格不另加，也能支持我下一趟的旅費與寫作。',
-        supportNote:
-          '「漫步推薦」裡會持續更新旅宿與好物清單。每一杯咖啡與合作導購，都是我繼續記錄風景與故事的小小旅費基金。',
+          '若這些路線與畫面對你的旅程有幫助，歡迎追蹤我的日常漫步，或給予我一點微小的支持，能為我累積下一趟旅途與寫作的旅費。',
+        // text: '若這些路線與畫面對你的旅程有幫助，歡迎到「漫步推薦」看我整理過的旅宿與行程工具；…',
+        supportNote: '每一杯咖啡，都是我繼續記錄風景與故事的小小旅費基金。',
+        // supportNote: '「漫步推薦」裡會持續更新旅宿與好物清單。…',
         ctaLayout: 'default',
       };
     case 'Discussion':
@@ -35,40 +37,37 @@ function getConfig(collection) {
       return {
         title: '文字日常',
         supportNote:
-          '你的追蹤與贊助、漫步推薦的導購，會成為我在異地持續寫詩、寫散文、完成第一本詩集的溫柔推力與出版準備。',
+          '你的追蹤與贊助，會成為我在異地持續寫詩、寫散文、完成第一本詩集的溫柔推力與出版準備。',
+        // supportNote: '你的追蹤與贊助、漫步推薦的導購，會成為…',
         ctaLayout: 'salon',
       };
   }
 }
 
-function getLeftCta(collection, cfg) {
-  if (cfg.ctaLayout === 'salon') {
+function getLeftCta(collection) {
+  // 漫步推薦頁暫時下線
+  // if (cfg.ctaLayout === 'salon') {
+  //   return { href: '/promote#read', label: '漫步推薦', Icon: Sparkles };
+  // }
+  // if (collection === 'Travel') {
+  //   return { href: '/promote#travel', label: '漫步推薦 · 旅宿與行程', Icon: MapPin };
+  // }
+  if (collection === 'Discussion') {
     return {
-      href: '/promote#read',
-      label: '漫步推薦',
-      Icon: Sparkles,
+      href: '/collaboration',
+      label: '探索合作諮詢',
+      Icon: Lamp,
     };
   }
-  if (collection === 'Travel') {
-    return {
-      href: '/promote#travel',
-      label: '漫步推薦 · 旅宿與行程',
-      Icon: MapPin,
-    };
-  }
-  return {
-    href: '/collaboration',
-    label: '探索合作諮詢',
-    Icon: Lamp,
-  };
+  return null;
 }
 
 const IG_URL = 'https://www.instagram.com/banni_walks';
 
 export default function PostFooterCTA({ collection }) {
   const cfg = getConfig(collection);
-  const leftCta = getLeftCta(collection, cfg);
-  const Icon = leftCta.Icon;
+  const leftCta = getLeftCta(collection);
+  const Icon = leftCta?.Icon;
 
   return (
     <section className="mt-12 rounded-2xl border border-amber-100 bg-amber-50/60 px-6 py-6 sm:px-8 sm:py-7">
@@ -95,13 +94,15 @@ export default function PostFooterCTA({ collection }) {
 
         <div className="space-y-3">
           <div className={ctaRowClassName}>
-            <div className={ctaLeftColClassName}>
-              <Link href={leftCta.href} className={leftCtaClassName}>
-                <Icon className="h-5 w-5 shrink-0 text-white sm:h-6 sm:w-6" strokeWidth={2} aria-hidden />
-                <span className="relative">{leftCta.label}</span>
-              </Link>
-            </div>
-            <div className={ctaRightColClassName}>
+            {leftCta ? (
+              <div className={ctaLeftColClassName}>
+                <Link href={leftCta.href} className={leftCtaClassName}>
+                  <Icon className="h-5 w-5 shrink-0 text-white sm:h-6 sm:w-6" strokeWidth={2} aria-hidden />
+                  <span className="relative">{leftCta.label}</span>
+                </Link>
+              </div>
+            ) : null}
+            <div className={leftCta ? ctaRightColClassName : 'flex w-full justify-center'}>
               <BuyMeACoffeeImageLink />
             </div>
           </div>

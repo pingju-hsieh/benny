@@ -73,14 +73,14 @@ export default async function LinksPage() {
           </Link>
         </div>
 
-        {/* 漫步推薦 + 贊助 */}
+        {/* 漫步推薦暫時下線；贊助 */}
         <div className="mt-5 space-y-3">
-          <Link
+          {/* <Link
             href="/promote"
             className="block w-full rounded-full border border-amber-700 text-amber-800 bg-white px-5 py-3 text-sm font-medium text-center hover:bg-amber-700 hover:text-white transition"
           >
             🛒 漫步推薦
-          </Link>
+          </Link> */}
           <a
             href="https://www.buymeacoffee.com/banni.walks"
             target="_blank"

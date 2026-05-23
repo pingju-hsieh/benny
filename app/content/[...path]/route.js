@@ -56,9 +56,20 @@ function parseRangeHeader(rangeHeader, size) {
   return { start, end };
 }
 
-const cacheHeaders = {
-  'Cache-Control': 'public, max-age=31536000, immutable',
-};
+const VIDEO_EXTS = new Set(['.mp4', '.mov', '.webm']);
+
+/** 圖片可長期快取；影片需 Vary: Range，避免 CDN 把整包 200 回給 Safari 的 Range 請求 */
+function cacheHeadersFor(ext) {
+  if (VIDEO_EXTS.has(ext.toLowerCase())) {
+    return {
+      'Cache-Control': 'public, max-age=3600, must-revalidate',
+      Vary: 'Range',
+    };
+  }
+  return {
+    'Cache-Control': 'public, max-age=31536000, immutable',
+  };
+}
 
 export async function GET(req, { params }) {
   const parts = (params?.path ?? []).map((p) => String(p));
@@ -84,7 +95,9 @@ export async function GET(req, { params }) {
   }
 
   const size = stat.size;
-  const contentType = mimeFromExt(path.extname(normalizedFile));
+  const ext = path.extname(normalizedFile);
+  const contentType = mimeFromExt(ext);
+  const cacheHeaders = cacheHeadersFor(ext);
   const rangeHeader = req.headers.get('range');
   const range = rangeHeader ? parseRangeHeader(rangeHeader, size) : null;
 

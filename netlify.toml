@@ -1,0 +1,5 @@
+# Next.js on Netlify — 影片須依 Range 分開快取，否則 Safari 會拿到錯誤的 200 整包回應
+[[headers]]
+  for = "/content/*"
+  [headers.values]
+    Vary = "Range"
