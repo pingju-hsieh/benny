@@ -1,5 +1,25 @@
-# Next.js on Netlify — 影片須依 Range 分開快取，否則 Safari 會拿到錯誤的 200 整包回應
+# Safari 影片需正確的 HTTP Range（206）。勿讓 CDN 快取「整包 200」後回給 Range 請求。
+
 [[headers]]
-  for = "/content/*"
+  for = "/content/**/*.mp4"
   [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
     Vary = "Range"
+    Netlify-Vary = "header=range"
+    Netlify-CDN-Cache-Control = "public, max-age=0, must-revalidate, durable"
+
+[[headers]]
+  for = "/content/**/*.mov"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+    Vary = "Range"
+    Netlify-Vary = "header=range"
+    Netlify-CDN-Cache-Control = "public, max-age=0, must-revalidate, durable"
+
+[[headers]]
+  for = "/content/**/*.webm"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+    Vary = "Range"
+    Netlify-Vary = "header=range"
+    Netlify-CDN-Cache-Control = "public, max-age=0, must-revalidate, durable"

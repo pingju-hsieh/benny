@@ -19,6 +19,11 @@ dist
 dist-ssr
 build
 
+# 建置時由 scripts/sync-content-videos.mjs 從 content/ 複製（勿提交）
+public/content/**/*.mp4
+public/content/**/*.mov
+public/content/**/*.webm
+
 # 環境變數（勿提交金鑰；範例檔可命名 .env.example 並納入版控）
 .env*
 !.env.example

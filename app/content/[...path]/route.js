@@ -3,7 +3,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 
+/** 勿靜態快取此 route，避免 Netlify 把整包 200 快取成唯一版本 */
+export const dynamic = 'force-dynamic';
+
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
+const PUBLIC_CONTENT_ROOT = path.join(process.cwd(), 'public', 'content');
+const VIDEO_EXTS = new Set(['.mp4', '.mov', '.webm']);
 
 const mimeFromExt = (ext) => {
   switch (ext.toLowerCase()) {
@@ -41,7 +46,6 @@ function parseRangeHeader(rangeHeader, size) {
   let end = endStr !== '' ? Number.parseInt(endStr, 10) : NaN;
 
   if (startStr === '' && !Number.isNaN(end)) {
-    // suffix range: bytes=-500
     const suffixLength = end;
     start = Math.max(0, size - suffixLength);
     end = size - 1;
@@ -54,21 +58,38 @@ function parseRangeHeader(rangeHeader, size) {
   if (start < 0 || end < start || start >= size) return 'unsatisfiable';
   end = Math.min(end, size - 1);
   return { start, end };
-}
+};
 
-const VIDEO_EXTS = new Set(['.mp4', '.mov', '.webm']);
-
-/** 圖片可長期快取；影片需 Vary: Range，避免 CDN 把整包 200 回給 Safari 的 Range 請求 */
 function cacheHeadersFor(ext) {
   if (VIDEO_EXTS.has(ext.toLowerCase())) {
     return {
       'Cache-Control': 'public, max-age=3600, must-revalidate',
+      'Netlify-CDN-Cache-Control': 'public, max-age=0, must-revalidate, durable',
+      'Netlify-Vary': 'header=range',
       Vary: 'Range',
     };
   }
   return {
     'Cache-Control': 'public, max-age=31536000, immutable',
   };
+}
+
+async function resolveFilePath(parts) {
+  const fromContent = path.join(CONTENT_ROOT, ...parts);
+  const fromPublic = path.join(PUBLIC_CONTENT_ROOT, ...parts);
+
+  for (const candidate of [fromPublic, fromContent]) {
+    const normalizedRoot = path.resolve(candidate === fromPublic ? PUBLIC_CONTENT_ROOT : CONTENT_ROOT);
+    const normalizedFile = path.resolve(candidate);
+    if (!normalizedFile.startsWith(normalizedRoot)) continue;
+    try {
+      const stat = await fs.stat(normalizedFile);
+      if (stat.isFile()) return normalizedFile;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
 }
 
 export async function GET(req, { params }) {
@@ -79,11 +100,9 @@ export async function GET(req, { params }) {
     return new Response('Bad request', { status: 400 });
   }
 
-  const filePath = path.join(CONTENT_ROOT, ...parts);
-  const normalizedRoot = path.resolve(CONTENT_ROOT);
-  const normalizedFile = path.resolve(filePath);
-  if (!normalizedFile.startsWith(normalizedRoot)) {
-    return new Response('Bad request', { status: 400 });
+  const normalizedFile = await resolveFilePath(parts);
+  if (!normalizedFile) {
+    return new Response('Not found', { status: 404 });
   }
 
   let stat;
@@ -106,6 +125,7 @@ export async function GET(req, { params }) {
       status: 416,
       headers: {
         'Content-Range': `bytes */${size}`,
+        ...cacheHeaders,
       },
     });
   }
