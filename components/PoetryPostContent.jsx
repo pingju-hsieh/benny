@@ -64,8 +64,11 @@ export default function PoetryPostContent({ html, title, date }) {
         className="poetry-content relative z-0"
         dangerouslySetInnerHTML={{ __html: html }}
       />
-      {/* Transparent overlay to prevent text selection / right-click on words */}
-      <div className="absolute inset-0 z-10 rounded-2xl cursor-default" aria-hidden="true" />
+      {/* 不擋住 video / audio 控制；文字仍由 select-none 與 onContextMenu 保護 */}
+      <div
+        className="absolute inset-0 z-10 rounded-2xl cursor-default pointer-events-none"
+        aria-hidden="true"
+      />
       <p className="mt-10 text-center text-amber-800/80 text-sm font-serif tracking-[0.2em]">
         {signature}
       </p>

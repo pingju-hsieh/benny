@@ -246,6 +246,10 @@
 .poetry-content img {
   @apply my-6 rounded-lg shadow max-w-full h-auto;
 }
+.poetry-content video {
+  @apply relative z-20 my-6 max-w-full rounded-lg shadow;
+  pointer-events: auto;
+}
 
 /* 新詩模式：列印時隱藏詩箋內容（防拷貝） */
 @media print {

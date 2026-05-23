@@ -80,5 +80,18 @@ thumbnail: C7D8E71B-F610-41FC-9244-CA168DD3B523.jpeg
 
 
 ![](C7D8E71B-F610-41FC-9244-CA168DD3B523.jpeg)
-![](IMG_5517.MOV)
 
+<div style="max-width: 100%; margin: 2rem auto; text-align: center;">
+  <video 
+    src="/content/Life/2026-05-like-dreams/like-dreams.mp4"
+    controls 
+    playsinline
+    preload="metadata"
+    style="width: 100%; max-width: 800px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);"
+  >
+    您的瀏覽器不支援此影片播放。
+  </video>
+  <p style="font-family: serif; font-size: 0.875rem; color: #a8a29e; margin-top: 0.5rem;">
+    像夢一樣
+  </p>
+</div>

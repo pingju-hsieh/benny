@@ -1,5 +1,7 @@
+import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { Readable } from 'node:stream';
 
 const CONTENT_ROOT = path.join(process.cwd(), 'content');
 
@@ -18,16 +20,50 @@ const mimeFromExt = (ext) => {
       return 'image/svg+xml';
     case '.pdf':
       return 'application/pdf';
+    case '.mp4':
+      return 'video/mp4';
+    case '.mov':
+      return 'video/quicktime';
+    case '.webm':
+      return 'video/webm';
     default:
       return 'application/octet-stream';
   }
 };
 
-export async function GET(_req, { params }) {
+/** @returns {{ start: number, end: number } | 'unsatisfiable' | null} */
+function parseRangeHeader(rangeHeader, size) {
+  if (!rangeHeader?.startsWith('bytes=')) return null;
+
+  const spec = rangeHeader.replace(/^bytes=/, '').trim();
+  const [startStr, endStr] = spec.split('-');
+  let start = startStr !== '' ? Number.parseInt(startStr, 10) : NaN;
+  let end = endStr !== '' ? Number.parseInt(endStr, 10) : NaN;
+
+  if (startStr === '' && !Number.isNaN(end)) {
+    // suffix range: bytes=-500
+    const suffixLength = end;
+    start = Math.max(0, size - suffixLength);
+    end = size - 1;
+  } else if (Number.isNaN(start)) {
+    return null;
+  } else if (Number.isNaN(end)) {
+    end = size - 1;
+  }
+
+  if (start < 0 || end < start || start >= size) return 'unsatisfiable';
+  end = Math.min(end, size - 1);
+  return { start, end };
+}
+
+const cacheHeaders = {
+  'Cache-Control': 'public, max-age=31536000, immutable',
+};
+
+export async function GET(req, { params }) {
   const parts = (params?.path ?? []).map((p) => String(p));
   if (parts.length === 0) return new Response('Not found', { status: 404 });
 
-  // Prevent path traversal
   if (parts.some((p) => p.includes('..') || p.includes('\\'))) {
     return new Response('Bad request', { status: 400 });
   }
@@ -39,18 +75,53 @@ export async function GET(_req, { params }) {
     return new Response('Bad request', { status: 400 });
   }
 
+  let stat;
   try {
-    const data = await fs.readFile(normalizedFile);
-    const ext = path.extname(normalizedFile);
-    return new Response(data, {
-      status: 200,
-      headers: {
-        'Content-Type': mimeFromExt(ext),
-        'Cache-Control': 'public, max-age=31536000, immutable',
-      },
-    });
+    stat = await fs.stat(normalizedFile);
+    if (!stat.isFile()) return new Response('Not found', { status: 404 });
   } catch {
     return new Response('Not found', { status: 404 });
   }
-}
 
+  const size = stat.size;
+  const contentType = mimeFromExt(path.extname(normalizedFile));
+  const rangeHeader = req.headers.get('range');
+  const range = rangeHeader ? parseRangeHeader(rangeHeader, size) : null;
+
+  if (range === 'unsatisfiable') {
+    return new Response(null, {
+      status: 416,
+      headers: {
+        'Content-Range': `bytes */${size}`,
+      },
+    });
+  }
+
+  if (range) {
+    const { start, end } = range;
+    const length = end - start + 1;
+    const stream = createReadStream(normalizedFile, { start, end });
+
+    return new Response(Readable.toWeb(stream), {
+      status: 206,
+      headers: {
+        'Content-Type': contentType,
+        'Content-Length': String(length),
+        'Content-Range': `bytes ${start}-${end}/${size}`,
+        'Accept-Ranges': 'bytes',
+        ...cacheHeaders,
+      },
+    });
+  }
+
+  const data = await fs.readFile(normalizedFile);
+  return new Response(data, {
+    status: 200,
+    headers: {
+      'Content-Type': contentType,
+      'Content-Length': String(size),
+      'Accept-Ranges': 'bytes',
+      ...cacheHeaders,
+    },
+  });
+}
